@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour
         Vector2 velocity = rb.linearVelocity;
         velocity.x = moveX;
         rb.linearVelocity = velocity;
-        
+
+        Vector2 position = rb.position;
+        position.x = Mathf.Clamp(position.x, -2.5f, 2.5f);
+        rb.position = position;
     }
 }
