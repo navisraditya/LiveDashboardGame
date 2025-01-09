@@ -16,6 +16,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         moveX = Input.GetAxis("Horizontal")  * moveSpeed;
+
+        if (moveX > 0)
+        {
+            transform.localScale = new Vector3(1,1,1);
+        } else if (moveX < 0)
+        {
+            transform.localScale = new Vector3(-1,1,1);
+        }
     }
 
     private void FixedUpdate()
