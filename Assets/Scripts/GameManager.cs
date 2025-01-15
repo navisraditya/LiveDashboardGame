@@ -4,6 +4,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject playerPrefab;
     public GameObject platformPrefab;
+    // public GameObject scoreUI;
     public int platformCount = 300;
     public float fadeDuration = 1.25f;
     public bool isFrozen = false;
@@ -110,6 +111,7 @@ public class GameManager : MonoBehaviour
         // Reactivate the player and platform objects
         playerPrefab.SetActive(true);
         platformPrefab.SetActive(true);
+        // scoreUI.SetActive(true);
         uiHider.DisableButtons();
         // Start the game and resume time
         Time.timeScale = 1;

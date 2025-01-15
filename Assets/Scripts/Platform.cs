@@ -3,6 +3,7 @@ using UnityEngine;
 public class Platform : MonoBehaviour
 {
     public float jumpForce = 10f;
+    public ScoreManager scoreManager;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -15,6 +16,10 @@ public class Platform : MonoBehaviour
                 Vector2  velocity = rb.linearVelocity;
                 velocity.y = jumpForce;
                 rb.linearVelocity = velocity;
+
+                if(collision.gameObject.CompareTag("Player")) {
+                    scoreManager.IncScore();
+                }
             }
         }
     }
