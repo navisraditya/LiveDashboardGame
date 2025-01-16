@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>supabase-core</id>
+    <version>0.0.2</version>
+    <title>Supabase Core</title>
+    <authors>Joseph Schultz &lt;joseph@acupofjose.com&gt;</authors>
+    <owners>Joseph Schultz &lt;joseph@acupofjose.com&gt;</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/supabase-community/core-csharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/supabase-community/core-csharp</projectUrl>
+    <iconUrl>https://avatars.githubusercontent.com/u/54469796?s=200&amp;v=4</iconUrl>
+    <description>Shared core for supabase-csharp</description>
+    <copyright>MIT</copyright>
+    <tags>supabase, core</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>
