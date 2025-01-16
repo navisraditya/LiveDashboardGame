@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      doodler-left_0: -5708109106018729326
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

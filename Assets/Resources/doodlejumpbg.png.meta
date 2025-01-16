@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      doodlejumpbg_0: 2559521457269028498
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
