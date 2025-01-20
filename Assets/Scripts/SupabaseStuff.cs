@@ -13,7 +13,7 @@ namespace App {
     public class SupabaseStuff : MonoBehaviour {
     public const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
     public const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
-        public TMP_InputField result;
+        // public TMP_InputField result;
         public TMP_InputField email;
         public TMP_InputField password;
 
@@ -33,50 +33,50 @@ namespace App {
             try {
                 await signUp;
             } catch (BadRequestException badRequestException) {
-                result.text += "BadRequestException";
-                result.text += $"{badRequestException.Message}";
-                result.text += $"{badRequestException.Content}";
-                result.text += $"{badRequestException.StackTrace}";
+                Debug.Log("BadRequestException") ;
+                Debug.Log($"{badRequestException.Message}") ;
+                Debug.Log($"{badRequestException.Content}") ;
+                Debug.Log($"{badRequestException.StackTrace}") ;
                 return;
             } catch (UnauthorizedException unauthorizedException) {
-                result.text += "UnauthorizedException";
-                result.text += unauthorizedException.Message;
-                result.text += unauthorizedException.Content;
-                result.text += unauthorizedException.StackTrace;
+                Debug.Log("UnauthorizedException") ;
+                Debug.Log(unauthorizedException.Message) ;
+                Debug.Log(unauthorizedException.Content) ;
+                Debug.Log(unauthorizedException.StackTrace) ;
                 return;
             } catch (ExistingUserException existingUserException) {
-                result.text += "ExistingUserException";
-                result.text += existingUserException.Message;
-                result.text += existingUserException.Content;
-                result.text += existingUserException.StackTrace;
+                Debug.Log("ExistingUserException") ;
+                Debug.Log(existingUserException.Message) ;
+                Debug.Log(existingUserException.Content) ;
+                Debug.Log(existingUserException.StackTrace) ;
                 return;
             } catch (ForbiddenException forbiddenException) {
-                result.text += "ForbiddenException";
-                result.text += forbiddenException.Message;
-                result.text += forbiddenException.Content;
-                result.text += forbiddenException.StackTrace;
+                Debug.Log("ForbiddenException") ;
+                Debug.Log(forbiddenException.Message) ;
+                Debug.Log(forbiddenException.Content) ;
+                Debug.Log(forbiddenException.StackTrace) ;
                 return;
             // } catch (InvalidProviderException invalidProviderException) {
-            //     result.text += "invalidProviderException";
-            //     result.text += invalidProviderException.Message;
-            //     result.text += invalidProviderException.StackTrace;
+            //     Debug.Log() "invalidProviderException";
+            //     Debug.Log() invalidProviderException.Message;
+            //     Debug.Log() invalidProviderException.StackTrace;
             //     return;
             } catch (InvalidEmailOrPasswordException invalidEmailOrPasswordException) {
-                result.text += "invalidEmailOrPasswordException";
-                result.text += invalidEmailOrPasswordException.Message;
-                result.text += invalidEmailOrPasswordException.Content;
-                result.text += invalidEmailOrPasswordException.StackTrace;
+                Debug.Log("invalidEmailOrPasswordException") ;
+                Debug.Log(invalidEmailOrPasswordException.Message) ;
+                Debug.Log(invalidEmailOrPasswordException.Content) ;
+                Debug.Log(invalidEmailOrPasswordException.StackTrace) ;
                 return;
             } catch (Exception exception) {
-                result.text += "unknown exception";
-                result.text += exception.Message;
-                result.text += exception.StackTrace;
+                Debug.Log("unknown exception") ;
+                Debug.Log(exception.Message) ;
+                Debug.Log(exception.StackTrace) ;
                 return;
             }
 
             Session session = signUp.Result;
 
-            result.text = $"Supabase sign in user id: {session?.User?.Id}";
+            Debug.Log($"Supabase sign in user id: {session?.User?.Id}");
         }
 
         public async void LogInUser() {
@@ -85,59 +85,58 @@ namespace App {
             try {
                 await signUp;
             } catch (BadRequestException badRequestException) {
-                result.text = "\nBadRequestException";
-                result.text += $"\n{badRequestException.Message}";
-                result.text += $"\n{badRequestException.Content}";
-                result.text += $"\n{badRequestException.StackTrace}";
+                Debug.Log("BadRequestException") ;
+                Debug.Log($"{badRequestException.Message}") ;
+                Debug.Log($"{badRequestException.Content}") ;
+                Debug.Log($"{badRequestException.StackTrace}") ;
                 return;
             } catch (UnauthorizedException unauthorizedException) {
-                result.text += "UnauthorizedException";
-                result.text += unauthorizedException.Message;
-                result.text += unauthorizedException.Content;
-                result.text += unauthorizedException.StackTrace;
+                Debug.Log("UnauthorizedException") ;
+                Debug.Log(unauthorizedException.Message) ;
+                Debug.Log(unauthorizedException.Content) ;
+                Debug.Log(unauthorizedException.StackTrace) ;
                 return;
             } catch (ExistingUserException existingUserException) {
-                result.text += "ExistingUserException";
-                result.text += existingUserException.Message;
-                result.text += existingUserException.Content;
-                result.text += existingUserException.StackTrace;
+                Debug.Log("ExistingUserException") ;
+                Debug.Log(existingUserException.Message) ;
+                Debug.Log(existingUserException.Content) ;
+                Debug.Log(existingUserException.StackTrace) ;
                 return;
             } catch (ForbiddenException forbiddenException) {
-                result.text += "ForbiddenException";
-                result.text += forbiddenException.Message;
-                result.text += forbiddenException.Content;
-                result.text += forbiddenException.StackTrace;
+                Debug.Log("ForbiddenException") ;
+                Debug.Log(forbiddenException.Message) ;
+                Debug.Log(forbiddenException.Content) ;
+                Debug.Log(forbiddenException.StackTrace) ;
                 return;
             // } catch (InvalidProviderException invalidProviderException) {
-            //     result.text += "invalidProviderException";
-            //     result.text += invalidProviderException.Message;
-            //     result.text += invalidProviderException.StackTrace;
+            //     Debug.Log() "invalidProviderException";
+            //     Debug.Log() invalidProviderException.Message;
+            //     Debug.Log() invalidProviderException.StackTrace;
             //     return;
             } catch (InvalidEmailOrPasswordException invalidEmailOrPasswordException) {
-                result.text += "invalidEmailOrPasswordException";
-                result.text += invalidEmailOrPasswordException.Message;
-                result.text += invalidEmailOrPasswordException.Content;
-                result.text += invalidEmailOrPasswordException.StackTrace;
+                Debug.Log("invalidEmailOrPasswordException") ;
+                Debug.Log(invalidEmailOrPasswordException.Message) ;
+                Debug.Log(invalidEmailOrPasswordException.Content) ;
+                Debug.Log(invalidEmailOrPasswordException.StackTrace) ;
                 return;
             } catch (Exception exception) {
-                result.text += "unknown exception";
-                result.text += exception.Message;
-                result.text += exception.StackTrace;
+                Debug.Log("unknown exception") ;
+                Debug.Log(exception.Message) ;
+                Debug.Log(exception.StackTrace) ;
                 return;
             }
 
             if (!signUp.IsCompletedSuccessfully) {
-                result.text += JsonUtility.ToJson(signUp.Exception);
+                Debug.Log(JsonUtility.ToJson(signUp.Exception));
                 return;
             }
 
             Session session = signUp.Result;
 
             if (session == null)
-                result.text += "nope";
+                Debug.Log( "nope");
             else {
-                result.text =
-                    $"Sign in success {session.User?.Id} {session.AccessToken} {session.User?.Aud} {session.User?.Email} {session.RefreshToken}";
+                Debug.Log($"Sign in success {session.User?.Id} {session.AccessToken} {session.User?.Aud} {session.User?.Email} {session.RefreshToken}");
             }
         }
 
@@ -150,83 +149,83 @@ namespace App {
             try {
                 await rpc;
             } catch (RequestException requestException) {
-                result.text += $"{requestException.Message}";
-                result.text += $"\n{requestException.Error}";
+                Debug.Log($"{requestException.Message}") ;
+                Debug.Log($"\n{requestException.Error}") ;
 
                 string content = await requestException.Response.Content.ReadAsStringAsync();
 
-                result.text += $"\nResponse {content}";
+                Debug.Log($"\nResponse {content}");
             } catch (Exception e) {
-                result.text = "RPC failed";
-                result.text += $"{e.Message}";
-                result.text += $"\n{e.StackTrace}";
+                Debug.Log("RPC failed") ;
+                Debug.Log($"{e.Message}") ;
+                Debug.Log($"\n{e.StackTrace}") ;
             }
 
             if (rpc.IsCompleted) {
-                result.text = rpc.Result.Content;
+                Debug.Log(rpc.Result.Content);
             } else {
-                result.text = $"{rpc.Status}";
+                Debug.Log($"{rpc.Status}");
             }
         }
 
         private void Complete() {
-            result.text += "Complete";
+            Debug.Log("Complete") ;
         }
 
         public void StartPublic() {
-            result.text = "...";
+            Debug.Log("...");
             RpcCall();
         }
 
     //     public void ManualAppleSignIn() {
-    //         result.text += "starting supabase apple sign in\n";
+    //         Debug.Log() "starting supabase apple sign in\n";
     //         AppleSignIn(_id);
-    //         result.text += "\nawaited supabase apple sign in";
+    //         Debug.Log() "\nawaited supabase apple sign in";
     //     }
 
     //     // ReSharper disable Unity.PerformanceAnalysis
     //     private async void AppleSignIn(string identityToken) {
     //         if (identityToken == null) {
-    //             result.text += "Null identity token\n";
+    //             Debug.Log() "Null identity token\n";
     //             return;
     //         }
 
-    //         result.text += "Starting supabase auth attempt\n";
+    //         Debug.Log() "Starting supabase auth attempt\n";
 
     //         Task<Session> t = null;
     //         try {
-    //             result.text = $"{identityToken.Length}";
+    //             Debug.Log = $"{identityToken.Length}";
 
     //             _supabase.Auth.GetHeaders!()["apikey"] = SUPABASE_PUBLIC_KEY;
     //             _supabase.Auth.GetHeaders!()["Authorization"] = $"Bearer ${SUPABASE_PUBLIC_KEY}";
 
     //             if (!string.IsNullOrEmpty(_nonce)) {
-    //                 result.text += $"signing in with nonce {_nonce}";
+    //                 Debug.Log() $"signing in with nonce {_nonce}";
     //                 t = _supabase.Auth.SignInWithIdToken(Constants.Provider.Apple, identityToken, _nonce);
     //             } else {
-    //                 result.text += "signing in without nonce";
+    //                 Debug.Log() "signing in without nonce";
     //                 t = _supabase.Auth.SignInWithIdToken(Constants.Provider.Apple, identityToken);
     //             }
 
     //             await t;
     //         } catch (UnauthorizedException e) {
-    //             result.text = "Exception with SignInWithIdToken";
-    //             result.text = $"Used nonce {_nonce}";
-    //             result.text += $"\n Exception {e.Message}";
-    //             result.text += $"\n {e.Content}";
+    //             Debug.Log = "Exception with SignInWithIdToken";
+    //             Debug.Log = $"Used nonce {_nonce}";
+    //             Debug.Log() $"\n Exception {e.Message}";
+    //             Debug.Log() $"\n {e.Content}";
     //         } catch (BadRequestException e) {
-    //             result.text += "\n";
-    //             result.text += e.Content;
+    //             Debug.Log() "\n";
+    //             Debug.Log() e.Content;
     //         } catch (Exception e) {
-    //             result.text = "Unknown Exception with SignInWithIdToken";
-    //             result.text += $"\n Exception {e.Message}";
-    //             result.text += $"\n {e.StackTrace}";
+    //             Debug.Log = "Unknown Exception with SignInWithIdToken";
+    //             Debug.Log() $"\n Exception {e.Message}";
+    //             Debug.Log() $"\n {e.StackTrace}";
     //         }
 
     //         if (t?.IsCompletedSuccessfully == true) {
-    //             result.text += $"\nsupabase login success\n {t.Result?.User?.Id}";
+    //             Debug.Log() $"\nsupabase login success\n {t.Result?.User?.Id}";
     //         } else {
-    //             result.text += $"\nsupabase failure\n {t?.Exception}";
+    //             Debug.Log() $"\nsupabase failure\n {t?.Exception}";
     //         }
     //     }
 

@@ -1581,6 +1581,7 @@ GameObject:
   - component: {fileID: 987567468}
   - component: {fileID: 987567467}
   - component: {fileID: 987567466}
+  - component: {fileID: 987567469}
   m_Layer: 5
   m_Name: '[Button] InputButton'
   m_TagString: Untagged
@@ -1651,10 +1652,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 987567469}
+        m_TargetAssemblyTypeName: App.SupabaseStuff, Assembly-CSharp
+        m_MethodName: LogInUser
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1665,11 +1666,11 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DelayedSceneLoader, Assembly-CSharp
-        m_MethodName: OnButtonPress
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1713,6 +1714,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987567464}
   m_CullTransparentMesh: 1
+--- !u!114 &987567469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987567464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49447037b7e9f88469d56994f191ba7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  email: {fileID: 1608801426}
+  password: {fileID: 1481820701}
 --- !u!1 &1066215136
 GameObject:
   m_ObjectHideFlags: 0
@@ -2414,7 +2429,7 @@ GameObject:
   - component: {fileID: 1392859562}
   - component: {fileID: 1392859561}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: '[TMP] Email'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2837,7 +2852,7 @@ GameObject:
   - component: {fileID: 1481820702}
   - component: {fileID: 1481820701}
   m_Layer: 5
-  m_Name: InputField (TMP)
+  m_Name: PasswordField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2911,17 +2926,17 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
-  m_InputType: 0
+  m_ContentType: 7
+  m_InputType: 2
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 3
+  m_CharacterLimit: 32
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -3014,7 +3029,7 @@ GameObject:
   - component: {fileID: 1482667953}
   - component: {fileID: 1482667952}
   m_Layer: 5
-  m_Name: Text (TMP) (2)
+  m_Name: '[TMP] Password'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3339,7 +3354,7 @@ GameObject:
   - component: {fileID: 1608801427}
   - component: {fileID: 1608801426}
   m_Layer: 5
-  m_Name: InputField (TMP) (2)
+  m_Name: EmailField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3413,17 +3428,17 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 6
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 7
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 7
   m_RegexValue: 
   m_GlobalPointSize: 14
-  m_CharacterLimit: 3
+  m_CharacterLimit: 32
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls: []
@@ -3607,10 +3622,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1481820700}
-  - {fileID: 1608801425}
   - {fileID: 1392859560}
+  - {fileID: 1608801425}
   - {fileID: 1482667951}
+  - {fileID: 1481820700}
   m_Father: {fileID: 1910579610}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3903,13 +3918,14 @@ GameObject:
   - component: {fileID: 1910579613}
   - component: {fileID: 1910579612}
   - component: {fileID: 1910579611}
+  - component: {fileID: 1910579615}
   m_Layer: 5
   m_Name: LoginCanvasGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1910579610
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4008,6 +4024,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1910579615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910579609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49447037b7e9f88469d56994f191ba7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  email: {fileID: 1608801426}
+  password: {fileID: 1481820701}
 --- !u!1 &1913886204
 GameObject:
   m_ObjectHideFlags: 0
