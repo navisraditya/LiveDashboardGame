@@ -11,20 +11,31 @@ using RequestException = Postgrest.RequestException;
 
 namespace App {
     public class SupabaseStuff : MonoBehaviour {
+    public static SupabaseStuff Instance { get; private set;}
     public const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
     public const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
         // public TMP_InputField result;
         public TMP_InputField email;
         public TMP_InputField password;
 
-        private static Client _supabase;
+        private Client _supabase;
         private string _id;
         private string _nonce;
 
-        private async void Start() {
+        private async void Awake() {
+            if (Instance != null && Instance != this) {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+
             if (_supabase == null) {
                 _supabase = new Client(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
                 await _supabase.InitializeAsync();
+                Debug.Log("supabase intiated");
             }
         }
 
@@ -175,6 +186,10 @@ namespace App {
         public void StartPublic() {
             Debug.Log("...");
             RpcCall();
+        }
+        
+        public Client GetSupabaseClient() {
+            return _supabase;
         }
 
     //     public void ManualAppleSignIn() {

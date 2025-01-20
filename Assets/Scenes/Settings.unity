@@ -717,7 +717,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a26d8a8cf9890f40b147d7c63b958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginWindow: {fileID: 1910579611}
+  targetWindow: {fileID: 1910579611}
 --- !u!1 &272310945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,7 +1643,7 @@ GameObject:
   - component: {fileID: 625334077}
   - component: {fileID: 625334076}
   - component: {fileID: 625334075}
-  - component: {fileID: 625334074}
+  - component: {fileID: 625334078}
   m_Layer: 5
   m_Name: '[Button] RegisButton'
   m_TagString: Untagged
@@ -1670,20 +1670,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -74}
   m_SizeDelta: {x: 150, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &625334074
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 625334072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49447037b7e9f88469d56994f191ba7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  email: {fileID: 1530432999}
-  password: {fileID: 654041211}
 --- !u!114 &625334075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1728,8 +1714,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 625334074}
-        m_TargetAssemblyTypeName: App.SupabaseStuff, Assembly-CSharp
+      - m_Target: {fileID: 625334078}
+        m_TargetAssemblyTypeName: App.RegisButton, Assembly-CSharp
         m_MethodName: RegisterUser
         m_Mode: 1
         m_Arguments:
@@ -1790,6 +1776,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 625334072}
   m_CullTransparentMesh: 1
+--- !u!114 &625334078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 625334072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f82b4013903a0904c80c0e0ad8909724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  email: {fileID: 1530432999}
+  password: {fileID: 654041211}
 --- !u!1 &651551116
 GameObject:
   m_ObjectHideFlags: 0
@@ -2587,7 +2587,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 987567469}
-        m_TargetAssemblyTypeName: App.SupabaseStuff, Assembly-CSharp
+        m_TargetAssemblyTypeName: App.LoginButton, Assembly-CSharp
         m_MethodName: LogInUser
         m_Mode: 1
         m_Arguments:
@@ -2657,7 +2657,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 987567464}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49447037b7e9f88469d56994f191ba7f, type: 3}
+  m_Script: {fileID: 11500000, guid: c4f628544f4f25443868598f8edaed3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   email: {fileID: 1608801426}
@@ -2868,7 +2868,6 @@ GameObject:
   - component: {fileID: 1180537222}
   - component: {fileID: 1180537221}
   - component: {fileID: 1180537220}
-  - component: {fileID: 1180537219}
   m_Layer: 5
   m_Name: RegisCanvasGroup
   m_TagString: Untagged
@@ -2899,20 +2898,6 @@ RectTransform:
   m_AnchoredPosition: {x: 275, y: 489}
   m_SizeDelta: {x: 550, y: 978}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1180537219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1180537217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49447037b7e9f88469d56994f191ba7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  email: {fileID: 1530432999}
-  password: {fileID: 654041211}
 --- !u!225 &1180537220
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3040,7 +3025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a26d8a8cf9890f40b147d7c63b958e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginWindow: {fileID: 0}
+  targetWindow: {fileID: 1180537220}
 --- !u!114 &1221283600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3085,8 +3070,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EmailLogin, Assembly-CSharp
+      - m_Target: {fileID: 1221283599}
+        m_TargetAssemblyTypeName: SettingWindowManager, Assembly-CSharp
         m_MethodName: SetActiveTrue
         m_Mode: 1
         m_Arguments:
@@ -5779,7 +5764,6 @@ GameObject:
   - component: {fileID: 1910579613}
   - component: {fileID: 1910579612}
   - component: {fileID: 1910579611}
-  - component: {fileID: 1910579615}
   m_Layer: 5
   m_Name: LoginCanvasGroup
   m_TagString: Untagged
@@ -5885,20 +5869,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1910579615
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1910579609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49447037b7e9f88469d56994f191ba7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  email: {fileID: 1608801426}
-  password: {fileID: 1481820701}
 --- !u!1 &1913886204
 GameObject:
   m_ObjectHideFlags: 0
