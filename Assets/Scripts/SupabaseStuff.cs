@@ -11,11 +11,8 @@ using RequestException = Postgrest.RequestException;
 
 namespace App {
     public class SupabaseStuff : MonoBehaviour {
-    public const string SUPABASE_URL = "https://[PROJECT_ID].supabase.co";
-
-        public const string SUPABASE_PUBLIC_KEY =
-            "the anon public key from your supabase project";
-
+    public const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
+    public const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
         public TMP_InputField result;
         public TMP_InputField email;
         public TMP_InputField password;
@@ -181,61 +178,61 @@ namespace App {
             RpcCall();
         }
 
-        // public void ManualAppleSignIn() {
-        //     result.text += "starting supabase apple sign in\n";
-        //     AppleSignIn(_id);
-        //     result.text += "\nawaited supabase apple sign in";
-        // }
+    //     public void ManualAppleSignIn() {
+    //         result.text += "starting supabase apple sign in\n";
+    //         AppleSignIn(_id);
+    //         result.text += "\nawaited supabase apple sign in";
+    //     }
 
-        // // ReSharper disable Unity.PerformanceAnalysis
-        // private async void AppleSignIn(string identityToken) {
-        //     if (identityToken == null) {
-        //         result.text += "Null identity token\n";
-        //         return;
-        //     }
+    //     // ReSharper disable Unity.PerformanceAnalysis
+    //     private async void AppleSignIn(string identityToken) {
+    //         if (identityToken == null) {
+    //             result.text += "Null identity token\n";
+    //             return;
+    //         }
 
-        //     result.text += "Starting supabase auth attempt\n";
+    //         result.text += "Starting supabase auth attempt\n";
 
-        //     Task<Session> t = null;
-        //     try {
-        //         result.text = $"{identityToken.Length}";
+    //         Task<Session> t = null;
+    //         try {
+    //             result.text = $"{identityToken.Length}";
 
-        //         _supabase.Auth.GetHeaders!()["apikey"] = SUPABASE_PUBLIC_KEY;
-        //         _supabase.Auth.GetHeaders!()["Authorization"] = $"Bearer ${SUPABASE_PUBLIC_KEY}";
+    //             _supabase.Auth.GetHeaders!()["apikey"] = SUPABASE_PUBLIC_KEY;
+    //             _supabase.Auth.GetHeaders!()["Authorization"] = $"Bearer ${SUPABASE_PUBLIC_KEY}";
 
-        //         if (!string.IsNullOrEmpty(_nonce)) {
-        //             result.text += $"signing in with nonce {_nonce}";
-        //             t = _supabase.Auth.SignInWithIdToken(Constants.Provider.Apple, identityToken, _nonce);
-        //         } else {
-        //             result.text += "signing in without nonce";
-        //             t = _supabase.Auth.SignInWithIdToken(Constants.Provider.Apple, identityToken);
-        //         }
+    //             if (!string.IsNullOrEmpty(_nonce)) {
+    //                 result.text += $"signing in with nonce {_nonce}";
+    //                 t = _supabase.Auth.SignInWithIdToken(Constants.Provider.Apple, identityToken, _nonce);
+    //             } else {
+    //                 result.text += "signing in without nonce";
+    //                 t = _supabase.Auth.SignInWithIdToken(Constants.Provider.Apple, identityToken);
+    //             }
 
-        //         await t;
-        //     } catch (UnauthorizedException e) {
-        //         result.text = "Exception with SignInWithIdToken";
-        //         result.text = $"Used nonce {_nonce}";
-        //         result.text += $"\n Exception {e.Message}";
-        //         result.text += $"\n {e.Content}";
-        //     } catch (BadRequestException e) {
-        //         result.text += "\n";
-        //         result.text += e.Content;
-        //     } catch (Exception e) {
-        //         result.text = "Unknown Exception with SignInWithIdToken";
-        //         result.text += $"\n Exception {e.Message}";
-        //         result.text += $"\n {e.StackTrace}";
-        //     }
+    //             await t;
+    //         } catch (UnauthorizedException e) {
+    //             result.text = "Exception with SignInWithIdToken";
+    //             result.text = $"Used nonce {_nonce}";
+    //             result.text += $"\n Exception {e.Message}";
+    //             result.text += $"\n {e.Content}";
+    //         } catch (BadRequestException e) {
+    //             result.text += "\n";
+    //             result.text += e.Content;
+    //         } catch (Exception e) {
+    //             result.text = "Unknown Exception with SignInWithIdToken";
+    //             result.text += $"\n Exception {e.Message}";
+    //             result.text += $"\n {e.StackTrace}";
+    //         }
 
-        //     if (t?.IsCompletedSuccessfully == true) {
-        //         result.text += $"\nsupabase login success\n {t.Result?.User?.Id}";
-        //     } else {
-        //         result.text += $"\nsupabase failure\n {t?.Exception}";
-        //     }
-        // }
+    //         if (t?.IsCompletedSuccessfully == true) {
+    //             result.text += $"\nsupabase login success\n {t.Result?.User?.Id}";
+    //         } else {
+    //             result.text += $"\nsupabase failure\n {t?.Exception}";
+    //         }
+    //     }
 
-        public void AssignId(string identityToken, string nonce, string nonceHash) {
-            _id = identityToken;
-            _nonce = nonce;
-        }
+    //     public void AssignId(string identityToken, string nonce, string nonceHash) {
+    //         _id = identityToken;
+    //         _nonce = nonce;
+    //     }
     }
 }
