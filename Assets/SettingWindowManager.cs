@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class EmailLogin : MonoBehaviour
+public class SettingWindowManager : MonoBehaviour
 {
 
-    public CanvasGroup loginWindow;
+    public CanvasGroup targetWindow;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -12,14 +12,14 @@ public class EmailLogin : MonoBehaviour
 
 
     public void SetActiveTrue() {
-        if(loginWindow != null) {
-            loginWindow.gameObject.SetActive(true);
+        if(targetWindow != null) {
+            targetWindow.gameObject.SetActive(true);
         }
     }
 
     public void SetActiveFalse() {
-        if(loginWindow != null){
-            loginWindow.gameObject.SetActive(false);
+        if(targetWindow != null){
+            targetWindow.gameObject.SetActive(false);
         }
     }
     // // Update is called once per frame
