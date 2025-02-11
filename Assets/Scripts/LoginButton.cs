@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Postgrest.Responses;
 using Supabase.Gotrue;
 using TMPro;
+using UnityEditor.UI;
 using UnityEngine;
 using Client = Supabase.Client;
 using RequestException = Postgrest.RequestException;
@@ -19,6 +20,7 @@ namespace App {
         // private string _id;
         // private string _nonce;
 
+        [SerializeField] CanvasGroup loginCanvasGroup;
 
         private void Awake() {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
@@ -31,9 +33,10 @@ namespace App {
         public async void LogInUser() {
             if(_supabase == null) {
                 Debug.LogError("supabase kosong_1");
+                loginCanvasGroup.gameObject.SetActive(false);
             }
 
-            Debug.Log("starting sign up");
+            Debug.Log("starting sign in");
             Task<Session> signUp = _supabase.Auth.SignInWithPassword(email.text, password.text);
             try {
                 await signUp;

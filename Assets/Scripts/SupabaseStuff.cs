@@ -192,6 +192,39 @@ namespace App {
             return _supabase;
         }
 
+        public User GetLoggedInUser() {
+                if (_supabase == null) {
+                    Debug.LogError("supabase client is not initialized");
+                    return null;
+                }
+
+                var session = _supabase.Auth.CurrentSession;
+                if (session == null) {
+                    Debug.Log("no active session found");
+                    return null;
+                }
+
+                var user = _supabase.Auth.CurrentUser;
+                if (user == null) {
+                    Debug.Log("no user is currently logged in");
+                    return null;
+                }
+
+                Debug.Log($"Logged in user: {user.Email}");
+                return user;
+        }
+
+        public bool CheckLoggedInUser() {
+            var user = GetLoggedInUser();
+            if (user != null){
+                Debug.Log($"User is logged in: {user.Email}");
+                return true;
+            } else {
+                Debug.Log("No user is logged in.");
+                return false;
+            }
+        }
+
     //     public void ManualAppleSignIn() {
     //         Debug.Log() "starting supabase apple sign in\n";
     //         AppleSignIn(_id);

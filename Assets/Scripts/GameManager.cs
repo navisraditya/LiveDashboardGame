@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject playerPrefab;
-    public GameObject platformPrefab;
-    // public GameObject scoreUI;
+    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject platformPrefab;
     public int platformCount = 300;
     public float fadeDuration = 1.25f;
     public bool isFrozen = false;
@@ -15,49 +14,67 @@ public class GameManager : MonoBehaviour
         public SpriteRenderer spriteRenderer;
         public float fadeTimer = 0f;
         public Rigidbody2D rb;  // Reference to the platform's Rigidbody2D (if applicable)
+        public GameObject platformObject; // Reference to the platform GameObject
     }
 
     private FadingPlatform[] fadingPlatforms;
+    private Transform playerTransform; // Reference to the player's transform
 
     void Start()
     {
         // Call PreGame to start the game in frozen state
         PreGame();
+
+        // Get the player's transform
+        if (playerPrefab != null)
+        {
+            playerTransform = playerPrefab.transform;
+        }
     }
 
-    void Update()
+void Update()
+{
+    if (isFrozen)
     {
-        // If the game is frozen, check for input to unfreeze
-        if (isFrozen)
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
         {
-            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
-            {
-                UnfreezeGame();
-            }
+            UnfreezeGame();
         }
+    }
 
-        // Fade platforms in (if not frozen)
-        if (!isFrozen)
+    if (!isFrozen)
+    {
+        for (int i = 0; i < platformCount; i++)
         {
-            for (int i = 0; i < platformCount; i++)
+            if (fadingPlatforms[i] != null && fadingPlatforms[i].spriteRenderer != null)
             {
-                if (fadingPlatforms[i] != null && fadingPlatforms[i].spriteRenderer != null)
+                FadingPlatform fadeData = fadingPlatforms[i];
+
+                if (fadeData.fadeTimer < fadeDuration)
                 {
-                    FadingPlatform fadeData = fadingPlatforms[i];
+                    fadeData.fadeTimer += Time.deltaTime;
 
-                    if (fadeData.fadeTimer < fadeDuration)
+                    float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
+                    Color color = fadeData.spriteRenderer.color;
+                    color.a = alpha;
+                    fadeData.spriteRenderer.color = color;
+                }
+
+                // Check if the camera has passed the platform
+                if (fadeData.platformObject != null)
+                {
+                    float cameraBottomY = Camera.main.transform.position.y - (Camera.main.orthographicSize + 1f); // Adding a small buffer
+
+                    if (fadeData.platformObject.transform.position.y < cameraBottomY)
                     {
-                        fadeData.fadeTimer += Time.deltaTime;
-
-                        float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
-                        Color color = fadeData.spriteRenderer.color;
-                        color.a = alpha;
-                        fadeData.spriteRenderer.color = color;
+                        Destroy(fadeData.platformObject);
+                        fadingPlatforms[i] = null; // Mark as destroyed
                     }
                 }
             }
         }
     }
+}
 
     void PreGame()
     {
@@ -85,6 +102,7 @@ public class GameManager : MonoBehaviour
                 {
                     spriteRenderer = spriteRenderer,
                     rb = rb,  // Save the reference to the Rigidbody2D
+                    platformObject = platform, // Save the reference to the platform GameObject
                     fadeTimer = 0f
                 };
 
@@ -111,7 +129,6 @@ public class GameManager : MonoBehaviour
         // Reactivate the player and platform objects
         playerPrefab.SetActive(true);
         platformPrefab.SetActive(true);
-        // scoreUI.SetActive(true);
         uiHider.DisableButtons();
         // Start the game and resume time
         Time.timeScale = 1;

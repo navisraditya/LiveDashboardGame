@@ -12,13 +12,15 @@ using RequestException = Postgrest.RequestException;
 namespace App {
     public class RegisButton : MonoBehaviour {
         // public TMP_InputField result;
-        public TMP_InputField email;
-        public TMP_InputField password;
-
         private static Client _supabase;
         // private string _id;
         // private string _nonce;
 
+        [SerializeField] CanvasGroup regisCanvasGroup;
+        [SerializeField] CanvasGroup loginCanvasGroup;
+        [SerializeField] TMP_InputField email;
+        [SerializeField] TMP_InputField password;
+        [SerializeField] TMP_InputField username;
 
         private void Awake() {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
@@ -29,7 +31,19 @@ namespace App {
         }
 
         public async void RegisterUser() {
-            Task<Session> signUp = _supabase.Auth.SignUp(email.text, password.text);
+            if(_supabase == null) {
+                Debug.LogError("supabase kosong_1");
+                regisCanvasGroup.gameObject.SetActive(false);
+            }
+
+            Debug.Log("starting sign up");
+
+            var options = new SignUpOptions {
+                Data = new Dictionary<string, object> {
+                    {"username", username.text}
+                }
+            };
+            Task<Session> signUp = _supabase.Auth.SignUp(email.text, password.text, options);
             try {
                 await signUp;
             } catch (BadRequestException badRequestException) {
@@ -76,7 +90,13 @@ namespace App {
 
             Session session = signUp.Result;
 
-            Debug.Log($"Supabase sign in user id: {session?.User?.Id}");
+            Debug.Log($"Supabase sign in user id: {session?.User?.Id}; Username: {username.text};");
+        }
+
+        public void RegisLogin()
+        {
+            RegisterUser();
+            loginCanvasGroup.gameObject.SetActive(true);
         }
     }
 }
