@@ -107,7 +107,7 @@ void Update()
                 };
 
                 Color color = spriteRenderer.color;
-                color.a = 0f; // Initially make the platforms invisible
+                color.a = 0f; // Initially make the platforms invissible
                 spriteRenderer.color = color;
             }
 

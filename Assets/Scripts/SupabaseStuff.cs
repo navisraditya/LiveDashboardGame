@@ -19,8 +19,8 @@ namespace App {
         public TMP_InputField password;
 
         private Client _supabase;
-        private string _id;
-        private string _nonce;
+        // private string _id;
+        // private string _nonce;
 
         private async void Awake() {
             if (Instance != null && Instance != this) {

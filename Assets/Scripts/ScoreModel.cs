@@ -6,7 +6,7 @@ using System;
 public class ScoreModel : BaseModel
 {
     [PrimaryKey("id", false)]
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
     
     [Column("player_id")]
     public string PlayerId { get; set; }
