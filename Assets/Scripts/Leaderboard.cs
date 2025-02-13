@@ -27,5 +27,6 @@ public class Leaderboard : MonoBehaviour
                 leaderboard.text = $"{i}. {score.PlayerId} {score.ScoreValue}";
             }
         }
+        Debug.Log("udah selesai");
     }
 }
