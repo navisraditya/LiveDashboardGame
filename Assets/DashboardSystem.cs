@@ -1,28 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using App;
-using NUnit.Framework;
 using TMPro;
-using UnityEditor.Compilation;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
-public class Leaderboard : MonoBehaviour
+public class DashboardSystem : MonoBehaviour
 {
     [SerializeField] TMP_Text leaderboard;
-    [SerializeField] TMP_Text playerPosition;
     [SerializeField] int topScoreLimit = 20;
     
     int scoreIdx = 1;
     
-    async void Awake() {
+    async void Awake()
+    {
         if(SupabaseStuff.Instance != null) {
+            await UpdateLeaderboardUI();
+        } else {
+            SupabaseStuff.Instance.GetSupabaseClient();
             await UpdateLeaderboardUI();
         }
     }
-    
+
     private async Task UpdateLeaderboardUI() {
         scoreIdx = 1;
         var topscores = await ScoreManager.Instance.FetchScores(topScoreLimit);
