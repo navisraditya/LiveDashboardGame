@@ -22,6 +22,7 @@ namespace App {
         [SerializeField] TMP_InputField password;
         [SerializeField] TMP_InputField username;
         [SerializeField] CanvasGroup regisPopUpNo;
+        [SerializeField] CanvasGroup regisPopUpYes;
 
         private void Awake() {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
@@ -34,7 +35,7 @@ namespace App {
         public async void RegisterUser() {
             if(_supabase == null) {
                 Debug.LogError("supabase kosong_1");
-                regisCanvasGroup.gameObject.SetActive(false);
+                ErrorPopUp();
             }
 
             Debug.Log("starting sign up");
@@ -97,13 +98,24 @@ namespace App {
         public void RegisLogin()
         {
             RegisterUser();
-            loginCanvasGroup.gameObject.SetActive(true);
+            regisPopUpYes.gameObject.SetActive(true);
+            
+            Timer.Instance.BeginCouting(3);
+            if(Timer.Instance.isCounting) {
+                regisCanvasGroup.gameObject.SetActive(false);
+            }
+            Timer.Instance.BeginCouting(3);
+            if(Timer.Instance.isCounting) {
+                loginCanvasGroup.gameObject.SetActive(true);
+            }
+
         }
 
         private void ErrorPopUp() {
-            regisCanvasGroup.gameObject.SetActive(false);
             regisPopUpNo.gameObject.SetActive(true);
+            email.text = "";
+            password.text = "";
+            username.text = "";
         }
-
     }
 }
