@@ -22,6 +22,7 @@ namespace App {
 
         [SerializeField] CanvasGroup loginCanvasGroup;
         [SerializeField] CanvasGroup loginPopUpNo;
+        [SerializeField] CanvasGroup loginPopUpYes;
 
         private void Awake() {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
@@ -34,7 +35,7 @@ namespace App {
         public async void LogInUser() {
             if(_supabase == null) {
                 Debug.LogError("supabase kosong_1");
-                loginCanvasGroup.gameObject.SetActive(false);
+                ErrorPopUp();
             }
 
             Debug.Log("starting sign in");
@@ -93,13 +94,24 @@ namespace App {
             if (session == null)
                 Debug.Log( "nope");
             else {
+                loginPopUpYes.gameObject.SetActive(true);
                 Debug.Log($"Sign in success {session.User?.Id} {session.AccessToken} {session.User?.Aud} {session.User?.Email} {session.RefreshToken}");
+                
+                Timer.Instance.BeginCouting(3);
+                
+                if(Timer.Instance.isCounting) {
+                    loginCanvasGroup.gameObject.SetActive(false);
+                    loginPopUpYes.gameObject.SetActive(false);
+                }
+                
             }
         }
 
         private void ErrorPopUp() {
-            loginCanvasGroup.gameObject.SetActive(false);
             loginPopUpNo.gameObject.SetActive(true);
+            email.text = "";
+            password.text = "";
+            // loginCanvasGroup.gameObject.SetActive(false);
         }
     }
 }

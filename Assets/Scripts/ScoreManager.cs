@@ -114,7 +114,6 @@ public class ScoreManager : MonoBehaviour
             return new List<ScoreModel>();
         }
     }
-
     public void SetPlaytime(float timerPlaytime) {
         playtime = timerPlaytime;
     }

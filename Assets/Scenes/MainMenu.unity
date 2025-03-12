@@ -771,6 +771,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCounting: 0
+  isCountingGameplay: 0
+  scoreManager: {fileID: 1905757143}
 --- !u!4 &499088456
 Transform:
   m_ObjectHideFlags: 0
