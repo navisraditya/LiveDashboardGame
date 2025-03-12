@@ -3,16 +3,16 @@ using UnityEngine.UI;
 
 public class UIHider : MonoBehaviour
 {
-    public Transform player;
-    public CanvasGroup canvasGroup;
+    [SerializeField] Transform player;
+    [SerializeField] CanvasGroup canvasGroup;
     private float hideThreshold = 5f;
     private float fadeSpeed = 1f;
 
-    // Ensure this object persists across scenes
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
+    
+    // void Awake()
+    // {
+    //     DontDestroyOnLoad(gameObject);
+    // }
 
     // Update is called once per frame
     void Update()
