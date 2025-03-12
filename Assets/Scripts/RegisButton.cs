@@ -21,6 +21,7 @@ namespace App {
         [SerializeField] TMP_InputField email;
         [SerializeField] TMP_InputField password;
         [SerializeField] TMP_InputField username;
+        [SerializeField] CanvasGroup regisPopUpNo;
 
         private void Awake() {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
@@ -51,25 +52,25 @@ namespace App {
                 Debug.Log($"{badRequestException.Message}") ;
                 Debug.Log($"{badRequestException.Content}") ;
                 Debug.Log($"{badRequestException.StackTrace}") ;
-                return;
+                ErrorPopUp();
             } catch (UnauthorizedException unauthorizedException) {
                 Debug.Log("UnauthorizedException") ;
                 Debug.Log(unauthorizedException.Message) ;
                 Debug.Log(unauthorizedException.Content) ;
                 Debug.Log(unauthorizedException.StackTrace) ;
-                return;
+                ErrorPopUp();
             } catch (ExistingUserException existingUserException) {
                 Debug.Log("ExistingUserException") ;
                 Debug.Log(existingUserException.Message) ;
                 Debug.Log(existingUserException.Content) ;
                 Debug.Log(existingUserException.StackTrace) ;
-                return;
+                ErrorPopUp();
             } catch (ForbiddenException forbiddenException) {
                 Debug.Log("ForbiddenException") ;
                 Debug.Log(forbiddenException.Message) ;
                 Debug.Log(forbiddenException.Content) ;
                 Debug.Log(forbiddenException.StackTrace) ;
-                return;
+                ErrorPopUp();
             // } catch (InvalidProviderException invalidProviderException) {
             //     Debug.Log() "invalidProviderException";
             //     Debug.Log() invalidProviderException.Message;
@@ -80,12 +81,12 @@ namespace App {
                 Debug.Log(invalidEmailOrPasswordException.Message) ;
                 Debug.Log(invalidEmailOrPasswordException.Content) ;
                 Debug.Log(invalidEmailOrPasswordException.StackTrace) ;
-                return;
+                ErrorPopUp();
             } catch (Exception exception) {
                 Debug.Log("unknown exception") ;
                 Debug.Log(exception.Message) ;
                 Debug.Log(exception.StackTrace) ;
-                return;
+                ErrorPopUp();
             }
 
             Session session = signUp.Result;
@@ -98,5 +99,11 @@ namespace App {
             RegisterUser();
             loginCanvasGroup.gameObject.SetActive(true);
         }
+
+        private void ErrorPopUp() {
+            regisCanvasGroup.gameObject.SetActive(false);
+            regisPopUpNo.gameObject.SetActive(true);
+        }
+
     }
 }

@@ -14,6 +14,7 @@ public class LoseCondition : MonoBehaviour
 
         if (rb != null && collision.gameObject.CompareTag("Player"))
         {
+            timer.StopGameplayCounter();
             timer.BeginCouting(timerTime);
             if (ScoreManager.Instance != null)
             {

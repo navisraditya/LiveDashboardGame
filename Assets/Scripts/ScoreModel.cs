@@ -1,6 +1,7 @@
 using Postgrest.Attributes;
 using Postgrest.Models;
 using System;
+using Unity.Mathematics;
 
 [Table("scores")]
 public class ScoreModel : BaseModel
@@ -16,4 +17,7 @@ public class ScoreModel : BaseModel
     
     [Column("timestamp")]
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+    
+    [Column("playtime")]
+    public float playtime {get; set;}
 }

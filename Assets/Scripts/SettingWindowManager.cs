@@ -3,7 +3,7 @@ using UnityEngine;
 public class SettingWindowManager : MonoBehaviour
 {
 
-    public CanvasGroup targetWindow;
+    [SerializeField] CanvasGroup targetWindow;
     public static CanvasGroup currWindow;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 

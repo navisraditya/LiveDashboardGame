@@ -133,6 +133,8 @@ void Update()
         // Start the game and resume time
         Time.timeScale = 1;
 
+        Timer.Instance.GameplayCounter();
+
         // Reactivate the physics for the platforms
         for (int i = 0; i < platformCount; i++)
         {

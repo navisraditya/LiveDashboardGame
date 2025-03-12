@@ -14,6 +14,7 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text scoreUI;
 
     private int score = 0;
+    private float playtime = 0;
 
     private void Awake()
     {
@@ -64,6 +65,7 @@ public class ScoreManager : MonoBehaviour
         {
             PlayerId = user.UserMetadata["username"].ToString(),
             ScoreValue = score,
+            playtime = playtime,
         };
 
         try
@@ -111,5 +113,9 @@ public class ScoreManager : MonoBehaviour
             Debug.Log("No scores found.");
             return new List<ScoreModel>();
         }
+    }
+
+    public void SetPlaytime(float timerPlaytime) {
+        playtime = timerPlaytime;
     }
 }

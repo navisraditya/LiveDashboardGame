@@ -1,4 +1,5 @@
 // Timer.cs
+using App;
 using UnityEngine;
 
 public class Timer : MonoBehaviour
@@ -6,7 +7,10 @@ public class Timer : MonoBehaviour
     public static Timer Instance { get; private set; }
 
     float remainingTime;
+    float playtime = 0;
     public bool isCounting = false;
+    public bool isCountingGameplay = false;
+    [SerializeField] ScoreManager scoreManager;
 
     private void Awake()
     {
@@ -42,4 +46,37 @@ public class Timer : MonoBehaviour
             isCounting = false;
         }
     }
+
+    public void GameplayCounter() {
+        if(!isCountingGameplay) {
+            isCountingGameplay = true;
+            _upcount();
+        }
+    }
+
+    public void StopGameplayCounter() {
+        isCountingGameplay = false;
+        scoreManager.SetPlaytime(playtime);
+        CancelInvoke("_upcount");
+    }
+
+    void _upcount() {
+        playtime++;
+        Invoke("_upcount", 1f);
+    }
+
+    // public async Task SavePlaytimeToSupabase() {
+    //     if(SupabaseStuff.Instance == null){
+    //         Debug.LogError("Supabase Error: Instance is null.");
+    //         return;
+    //     }
+
+    //     var user = SupabaseStuff.Instance.GetLoggedInUser();
+    //     if(user == null) {
+    //         Debug.LogError("no logged in user");
+    //         return;
+    //     }
+
+    //     var newTimer 
+    // }
 }
