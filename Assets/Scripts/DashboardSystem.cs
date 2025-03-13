@@ -65,7 +65,9 @@ public class DashboardSystem : MonoBehaviour
                 leaderboard.text += $"{scoreIdx}.     {score.PlayerId.PadRight(15)} {score.ScoreValue}\n";
                 if(user != null) {
                     if(user.UserMetadata["username"].ToString() == score.PlayerId) {
-                        currRank = scoreIdx;
+                        if(currRank == null) {
+                            currRank = scoreIdx;
+                        }
                         playerAttempt++;
                         totalPlaytime += score.playtime;
                         if(highestScore >= score.ScoreValue) {

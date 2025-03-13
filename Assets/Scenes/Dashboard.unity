@@ -6971,7 +6971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 155.37808, y: 19.1646}
+  m_AnchoredPosition: {x: 101.77, y: 19.1646}
   m_SizeDelta: {x: 230.5664, y: 60.2186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1339922979
@@ -7150,7 +7150,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 160.87918, y: 20}
+  m_AnchoredPosition: {x: 101.77, y: 20}
   m_SizeDelta: {x: 220, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364998537
@@ -9618,7 +9618,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 25.244995}
-  m_SizeDelta: {x: 98.1989, y: 19.8722}
+  m_SizeDelta: {x: 158.0742, y: 19.8722}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1904759533
 MonoBehaviour:
@@ -9640,7 +9640,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Your Rank
+  m_text: Your Highest Rank
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5befc670b1f29e94ab135fca2e2d5ceb, type: 2}
   m_sharedMaterial: {fileID: 6273531486756329600, guid: 5befc670b1f29e94ab135fca2e2d5ceb, type: 2}
@@ -9667,8 +9667,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 16
-  m_fontSizeBase: 16
+  m_fontSize: 15
+  m_fontSizeBase: 15
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

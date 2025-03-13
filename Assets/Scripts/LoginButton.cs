@@ -5,7 +5,6 @@ using Cysharp.Threading.Tasks;
 using Postgrest.Responses;
 using Supabase.Gotrue;
 using TMPro;
-using UnityEditor.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Client = Supabase.Client;
