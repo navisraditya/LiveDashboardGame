@@ -399,7 +399,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 16796181}
         m_TargetAssemblyTypeName: App.LoginButton, Assembly-CSharp
-        m_MethodName: LoginUserWithDashboard
+        m_MethodName: LoginUser
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

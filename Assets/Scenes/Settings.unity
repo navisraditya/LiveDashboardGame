@@ -780,7 +780,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &227628861
 RectTransform:
   m_ObjectHideFlags: 0
@@ -823,8 +823,8 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227628860}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
+  m_Alpha: 0
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &251819606
@@ -3990,7 +3990,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 987567469}
         m_TargetAssemblyTypeName: App.LoginButton, Assembly-CSharp
-        m_MethodName: LogInUser
+        m_MethodName: LoginUser
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

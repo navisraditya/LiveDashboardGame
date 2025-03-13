@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance {get; set;}
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject platformPrefab;
     public int platformCount = 300;
@@ -147,4 +148,16 @@ void Update()
         // Platforms should now start fading in
         isFrozen = false;
     }
+
+    // public void DestroyPlatforms()
+    // {
+    //     for (int i = 0; i < fadingPlatforms.Length; i++)
+    //     {
+    //         if (fadingPlatforms[i] != null && fadingPlatforms[i].platformObject != null)
+    //         {
+    //             Destroy(fadingPlatforms[i].platformObject); // Destroy the platform GameObject
+    //             fadingPlatforms[i] = null; // Clear the reference in the array
+    //         }
+    //     }
+    // }
 }

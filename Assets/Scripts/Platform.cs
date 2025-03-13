@@ -19,6 +19,7 @@ public class Platform : MonoBehaviour
 
                 if(collision.gameObject.CompareTag("Player")) {
                     scoreManager.IncScore();
+                    Destroy(gameObject);
                 }
             }
         }
