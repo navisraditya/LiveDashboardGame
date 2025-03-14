@@ -122,9 +122,11 @@ namespace App {
                 if(Timer.Instance.isCounting) {
                     if(loginPopUpYes != null) {
                         loginPopUpYes.gameObject.SetActive(false);
+                        Timer.Instance.isCounting = false;
                     }
                     if(loginCanvasGroup != null){
                         loginCanvasGroup.gameObject.SetActive(false);
+                        Timer.Instance.isCounting = false;
                     }
                 }
                 

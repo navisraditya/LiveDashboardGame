@@ -4,51 +4,62 @@ using App;
 
 public class LoseCondition : MonoBehaviour
 {
-    public static LoseCondition Instance {get; set;}
-    public bool isLoggedIn = false;
+    public static LoseCondition Instance { get; set; }
     public SceneLoader sceneLoader;
-    [SerializeField] private Timer timer;
+    [SerializeField] Timer timer; // Remove direct assignment
     [SerializeField] private float timerTime = 3f;
     [SerializeField] private CanvasGroup loginCanvas;
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        // Initialize the Timer reference
+        timer = Timer.Instance;
+    }
+
     private async void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if the collision is with the player
         if (collision.gameObject.CompareTag("Player"))
         {
-            isLoggedIn = false;
             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (rb == null) return;
 
-            // Slow down time for effect
             Time.timeScale = 0.25f;
 
-            // Stop the gameplay counter and start the timer
-            timer.StopGameplayCounter();
-            timer.BeginCouting(timerTime);
+            // Check if Timer instance exists
+            if (timer != null)
+            {
+                timer.StopGameplayCounter();
+                timer.BeginCouting(timerTime);
+            }
+            else
+            {
+                Debug.LogError("Timer instance is null.");
+            }
 
-            // Check if a user is logged in
             var user = SupabaseStuff.Instance.GetLoggedInUser();
-
             if (user == null)
             {
-                // No user is logged in, open the login canvas
                 OpenLoginCanvas();
-
-                // Save the score (if ScoreManager exists)
                 if (ScoreManager.Instance == null)
                 {
                     Debug.LogError("ScoreManager instance is null.");
                 }
-
             }
             else
             {
-                // User is logged in, save the score and load the leaderboard
                 if (ScoreManager.Instance != null)
                 {
-                    await ScoreManager.Instance.SaveScoreToSupabase(); // Save the score
-                    sceneLoader.LoadScene("Leaderboard"); // Load the leaderboard scene
+                    await ScoreManager.Instance.SaveScoreToSupabase();
+                    sceneLoader.LoadScene("Leaderboard");
                 }
                 else
                 {
@@ -60,11 +71,10 @@ public class LoseCondition : MonoBehaviour
 
     private void OpenLoginCanvas()
     {
-        // GameManager.Instance.DestroyPlatforms();
         if (loginCanvas != null)
         {
             Time.timeScale = 0f;
-            loginCanvas.gameObject.SetActive(true); // Show the login canvas
+            loginCanvas.gameObject.SetActive(true);
         }
         else
         {
