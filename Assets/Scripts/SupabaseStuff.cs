@@ -19,8 +19,8 @@ namespace App {
         public TMP_InputField password;
 
         private Client _supabase;
-        private string _id;
-        private string _nonce;
+        // private string _id;
+        // private string _nonce;
 
         private async void Awake() {
             if (Instance != null && Instance != this) {
@@ -190,6 +190,39 @@ namespace App {
         
         public Client GetSupabaseClient() {
             return _supabase;
+        }
+
+        public User GetLoggedInUser() {
+                if (_supabase == null) {
+                    Debug.LogError("supabase client is not initialized");
+                    return null;
+                }
+
+                var session = _supabase.Auth.CurrentSession;
+                if (session == null) {
+                    Debug.Log("no active session found");
+                    return null;
+                }
+
+                var user = _supabase.Auth.CurrentUser;
+                if (user == null) {
+                    Debug.Log("no user is currently logged in");
+                    return null;
+                }
+
+                Debug.Log($"Logged in user: {user.Email}");
+                return user;
+        }
+
+        public bool CheckLoggedInUser() {
+            var user = GetLoggedInUser();
+            if (user != null){
+                Debug.Log($"User is logged in: {user.Email}");
+                return true;
+            } else {
+                Debug.Log("No user is logged in.");
+                return false;
+            }
         }
 
     //     public void ManualAppleSignIn() {
