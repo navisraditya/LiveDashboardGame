@@ -1,7 +1,6 @@
 using Postgrest.Attributes;
 using Postgrest.Models;
 using System;
-using Unity.Mathematics;
 
 [Table("scores")]
 public class ScoreModel : BaseModel

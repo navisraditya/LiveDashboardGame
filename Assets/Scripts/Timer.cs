@@ -1,5 +1,4 @@
 // Timer.cs
-using App;
 using UnityEngine;
 
 public class Timer : MonoBehaviour

@@ -2,120 +2,219 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
-using Postgrest.Responses;
 using Supabase.Gotrue;
 using TMPro;
 using UnityEngine;
 using Client = Supabase.Client;
-using RequestException = Postgrest.RequestException;
 
-namespace App {
-    public class RegisButton : MonoBehaviour {
-        // public TMP_InputField result;
+namespace App
+{
+    public class RegisButton : MonoBehaviour
+    {
+        [SerializeField] private CanvasGroup regisCanvasGroup;
+        [SerializeField] private CanvasGroup loginCanvasGroup;
+        [SerializeField] private TMP_InputField email;
+        [SerializeField] private TMP_InputField password;
+        [SerializeField] private TMP_InputField username;
+        [SerializeField] private CanvasGroup regisPopUpNo;
+        [SerializeField] private CanvasGroup regisPopUpYes;
+
         private static Client _supabase;
-        // private string _id;
-        // private string _nonce;
 
-        [SerializeField] CanvasGroup regisCanvasGroup;
-        [SerializeField] CanvasGroup loginCanvasGroup;
-        [SerializeField] TMP_InputField email;
-        [SerializeField] TMP_InputField password;
-        [SerializeField] TMP_InputField username;
-        [SerializeField] CanvasGroup regisPopUpNo;
-        [SerializeField] CanvasGroup regisPopUpYes;
-
-        private void Awake() {
+        private void Awake()
+        {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
 
-            if(_supabase == null) {
-                Debug.LogError("supabase kosong.");
+            if (_supabase == null)
+            {
+                Debug.LogError("Supabase client is not initialized.");
             }
         }
 
-        public async void RegisterUser() {
-            if(_supabase == null) {
-                Debug.LogError("supabase kosong_1");
-                ErrorPopUp();
+        public async void RegisterUser()
+        {
+            if (_supabase == null)
+            {
+                Debug.LogError("Supabase client is not initialized.");
+                ShowErrorPopup();
+                return;
             }
 
-            Debug.Log("starting sign up");
+            if (string.IsNullOrEmpty(email.text) || string.IsNullOrEmpty(password.text) || string.IsNullOrEmpty(username.text))
+            {
+                Debug.LogError("Email, password, or username is empty.");
+                ShowErrorPopup();
+                return;
+            }
 
-            var options = new SignUpOptions {
-                Data = new Dictionary<string, object> {
+            Debug.Log("Starting sign up");
+
+            var options = new SignUpOptions
+            {
+                Data = new Dictionary<string, object>
+                {
                     {"username", username.text}
                 }
             };
-            Task<Session> signUp = _supabase.Auth.SignUp(email.text, password.text, options);
-            try {
-                await signUp;
-            } catch (BadRequestException badRequestException) {
-                Debug.Log("BadRequestException") ;
-                Debug.Log($"{badRequestException.Message}") ;
-                Debug.Log($"{badRequestException.Content}") ;
-                Debug.Log($"{badRequestException.StackTrace}") ;
-                ErrorPopUp();
-            } catch (UnauthorizedException unauthorizedException) {
-                Debug.Log("UnauthorizedException") ;
-                Debug.Log(unauthorizedException.Message) ;
-                Debug.Log(unauthorizedException.Content) ;
-                Debug.Log(unauthorizedException.StackTrace) ;
-                ErrorPopUp();
-            } catch (ExistingUserException existingUserException) {
-                Debug.Log("ExistingUserException") ;
-                Debug.Log(existingUserException.Message) ;
-                Debug.Log(existingUserException.Content) ;
-                Debug.Log(existingUserException.StackTrace) ;
-                ErrorPopUp();
-            } catch (ForbiddenException forbiddenException) {
-                Debug.Log("ForbiddenException") ;
-                Debug.Log(forbiddenException.Message) ;
-                Debug.Log(forbiddenException.Content) ;
-                Debug.Log(forbiddenException.StackTrace) ;
-                ErrorPopUp();
-            // } catch (InvalidProviderException invalidProviderException) {
-            //     Debug.Log() "invalidProviderException";
-            //     Debug.Log() invalidProviderException.Message;
-            //     Debug.Log() invalidProviderException.StackTrace;
-            //     return;
-            } catch (InvalidEmailOrPasswordException invalidEmailOrPasswordException) {
-                Debug.Log("invalidEmailOrPasswordException") ;
-                Debug.Log(invalidEmailOrPasswordException.Message) ;
-                Debug.Log(invalidEmailOrPasswordException.Content) ;
-                Debug.Log(invalidEmailOrPasswordException.StackTrace) ;
-                ErrorPopUp();
-            } catch (Exception exception) {
-                Debug.Log("unknown exception") ;
-                Debug.Log(exception.Message) ;
-                Debug.Log(exception.StackTrace) ;
-                ErrorPopUp();
+
+            try
+            {
+                var session = await _supabase.Auth.SignUp(email.text, password.text, options);
+
+                if (session == null)
+                {
+                    Debug.LogError("Sign up failed: Session is null.");
+                    ShowErrorPopup();
+                    return;
+                }
+
+                Debug.Log($"Supabase sign up user id: {session.User?.Id}; Username: {username.text};");
+                ShowSuccessPopup();
             }
-
-            Session session = signUp.Result;
-
-            Debug.Log($"Supabase sign in user id: {session?.User?.Id}; Username: {username.text};");
+            catch (BadRequestException ex)
+            {
+                Debug.LogError($"BadRequestException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (UnauthorizedException ex)
+            {
+                Debug.LogError($"UnauthorizedException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (ExistingUserException ex)
+            {
+                Debug.LogError($"ExistingUserException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (ForbiddenException ex)
+            {
+                Debug.LogError($"ForbiddenException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (InvalidEmailOrPasswordException ex)
+            {
+                Debug.LogError($"InvalidEmailOrPasswordException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Unknown exception: {ex.Message}");
+                ShowErrorPopup();
+            }
         }
 
-        public void RegisLogin()
+        public async void RegisLogin()
         {
-            RegisterUser();
-            regisPopUpYes.gameObject.SetActive(true);
-            
-            Timer.Instance.BeginCouting(3);
-            if(Timer.Instance.isCounting) {
+            await RegisterUserAsync();
+
+            if (regisPopUpYes != null)
+            {
+                regisPopUpYes.gameObject.SetActive(true);
+            }
+
+            await UniTask.Delay(3000); // Wait for 3 seconds
+
+            if (regisCanvasGroup != null)
+            {
                 regisCanvasGroup.gameObject.SetActive(false);
             }
-            Timer.Instance.BeginCouting(3);
-            if(Timer.Instance.isCounting) {
+
+            if (loginCanvasGroup != null)
+            {
                 loginCanvasGroup.gameObject.SetActive(true);
             }
-
         }
 
-        private void ErrorPopUp() {
-            regisPopUpNo.gameObject.SetActive(true);
+        private async UniTask RegisterUserAsync()
+        {
+            if (_supabase == null)
+            {
+                Debug.LogError("Supabase client is not initialized.");
+                ShowErrorPopup();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(email.text) || string.IsNullOrEmpty(password.text) || string.IsNullOrEmpty(username.text))
+            {
+                Debug.LogError("Email, password, or username is empty.");
+                ShowErrorPopup();
+                return;
+            }
+
+            Debug.Log("Starting sign up");
+
+            var options = new SignUpOptions
+            {
+                Data = new Dictionary<string, object>
+                {
+                    {"username", username.text}
+                }
+            };
+
+            try
+            {
+                var session = await _supabase.Auth.SignUp(email.text, password.text, options);
+
+                if (session == null)
+                {
+                    Debug.LogError("Sign up failed: Session is null.");
+                    ShowErrorPopup();
+                    return;
+                }
+
+                Debug.Log($"Supabase sign up user id: {session.User?.Id}; Username: {username.text};");
+                ShowSuccessPopup();
+            }
+            catch (BadRequestException ex)
+            {
+                Debug.LogError($"BadRequestException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (UnauthorizedException ex)
+            {
+                Debug.LogError($"UnauthorizedException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (ExistingUserException ex)
+            {
+                Debug.LogError($"ExistingUserException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (ForbiddenException ex)
+            {
+                Debug.LogError($"ForbiddenException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (InvalidEmailOrPasswordException ex)
+            {
+                Debug.LogError($"InvalidEmailOrPasswordException: {ex.Message}");
+                ShowErrorPopup();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"Unknown exception: {ex.Message}");
+                ShowErrorPopup();
+            }
+        }
+
+        private void ShowErrorPopup()
+        {
+            if (regisPopUpNo != null)
+            {
+                regisPopUpNo.gameObject.SetActive(true);
+            }
+
             email.text = "";
             password.text = "";
             username.text = "";
+        }
+
+        private void ShowSuccessPopup()
+        {
+            if (regisPopUpYes != null)
+            {
+                regisPopUpYes.gameObject.SetActive(true);
+            }
         }
     }
 }

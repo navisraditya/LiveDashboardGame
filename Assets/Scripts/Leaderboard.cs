@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using App;
-using NUnit.Framework;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class Leaderboard : MonoBehaviour
 {
@@ -22,7 +17,7 @@ public class Leaderboard : MonoBehaviour
         }
     }
     
-    private async Task UpdateLeaderboardUI() {
+    private async UniTask UpdateLeaderboardUI() {
         scoreIdx = 1;
         var topscores = await ScoreManager.Instance.FetchScores(topScoreLimit);
         foreach(var score in topscores) {

@@ -9317,7 +9317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd806aad1f63ee41b84f9237ab72267, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isLoggedIn: 0
   sceneLoader: {fileID: 427271912}
   timer: {fileID: 499088455}
   timerTime: 1
@@ -9922,9 +9921,9 @@ SceneRoots:
   - {fileID: 914472714}
   - {fileID: 1614793741}
   - {fileID: 1800733601}
+  - {fileID: 499088456}
   - {fileID: 2053429103}
   - {fileID: 69599799}
   - {fileID: 427271911}
   - {fileID: 1128916675}
   - {fileID: 1905757144}
-  - {fileID: 499088456}
