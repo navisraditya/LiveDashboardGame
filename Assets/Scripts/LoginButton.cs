@@ -197,65 +197,116 @@ namespace App
             SceneManager.LoadScene(targetWindow);
         }
 
-        private async UniTask LoginBackend()
+        // private async UniTask LoginBackend()
+        // {
+        //     if (string.IsNullOrEmpty(email.text) || string.IsNullOrEmpty(password.text))
+        //     {
+        //         Debug.LogError("Email or password is empty.");
+        //         ShowErrorPopup();
+        //         return;
+        //     }
+
+        //     Debug.Log("Starting sign in");
+
+        //     string url = $"{SUPABASE_URL}/auth/v1/token?grant_type=password";
+        //     string jsonData = $"{{\"email\":\"{email.text}\",\"password\":\"{password.text}\"}}";
+
+        //     using (UnityWebRequest webRequest = new UnityWebRequest(url, "POST"))
+        //     {
+        //         byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        //         webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        //         webRequest.downloadHandler = new DownloadHandlerBuffer();
+        //         webRequest.SetRequestHeader("Content-Type", "application/json");
+        //         webRequest.SetRequestHeader("apikey", SUPABASE_API_KEY);
+
+        //         await webRequest.SendWebRequest();
+
+        //         if (webRequest.result == UnityWebRequest.Result.ConnectionError || 
+        //             webRequest.result == UnityWebRequest.Result.ProtocolError)
+        //         {
+        //             Debug.LogError("Error logging in: " + webRequest.error);
+        //             Debug.LogError("Response: " + webRequest.downloadHandler.text);
+        //             ShowErrorPopup();
+        //         }
+        //         else
+        //         {
+        //             var response = JsonUtility.FromJson<LoginResponse>(webRequest.downloadHandler.text);
+        //             Debug.Log($"Sign in success: {response.user?.id} {response.access_token}");
+
+        //             // Store the access token and user metadata for future authenticated requests
+        //             PlayerPrefs.SetString("supabase_access_token", response.access_token);
+        //             PlayerPrefs.SetString("supabase_user_id", response.user.id);
+        //             PlayerPrefs.SetString("supabase_user_email", response.user.email);
+
+        //             // Store user metadata (e.g., username) if available
+        //             if (response.user.user_metadata != null && response.user.user_metadata.ContainsKey("username"))
+        //             {
+        //                 PlayerPrefs.SetString("supabase_user_username", response.user.user_metadata["username"].ToString());
+        //             }
+
+        //             // Initialize Supabase client with the logged-in user
+        //             SupabaseStuff.Instance?.InitializeSupabaseClient(response.access_token);
+
+        //             ShowSuccessPopup();
+
+        //             // Clear input fields for security
+        //             email.text = "";
+        //             password.text = "";
+        //         }
+        //     }
+        // }
+private async UniTask LoginBackend()
+{
+    if (string.IsNullOrEmpty(email.text) || string.IsNullOrEmpty(password.text))
+    {
+        Debug.LogError("Email or password is empty.");
+        ShowErrorPopup();
+        return;
+    }
+
+    Debug.Log("Starting sign in");
+
+    string url = $"{SUPABASE_URL}/auth/v1/token?grant_type=password";
+    string jsonData = $"{{\"email\":\"{email.text}\",\"password\":\"{password.text}\"}}";
+
+    using (UnityWebRequest webRequest = new UnityWebRequest(url, "POST"))
+    {
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        webRequest.downloadHandler = new DownloadHandlerBuffer();
+        webRequest.SetRequestHeader("Content-Type", "application/json");
+        webRequest.SetRequestHeader("apikey", SUPABASE_API_KEY);
+
+        await webRequest.SendWebRequest();
+
+        if (webRequest.result == UnityWebRequest.Result.ConnectionError || 
+            webRequest.result == UnityWebRequest.Result.ProtocolError)
         {
-            if (string.IsNullOrEmpty(email.text) || string.IsNullOrEmpty(password.text))
-            {
-                Debug.LogError("Email or password is empty.");
-                ShowErrorPopup();
-                return;
-            }
-
-            Debug.Log("Starting sign in");
-
-            string url = $"{SUPABASE_URL}/auth/v1/token?grant_type=password";
-            string jsonData = $"{{\"email\":\"{email.text}\",\"password\":\"{password.text}\"}}";
-
-            using (UnityWebRequest webRequest = new UnityWebRequest(url, "POST"))
-            {
-                byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
-                webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
-                webRequest.downloadHandler = new DownloadHandlerBuffer();
-                webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("apikey", SUPABASE_API_KEY);
-
-                await webRequest.SendWebRequest();
-
-                if (webRequest.result == UnityWebRequest.Result.ConnectionError || 
-                    webRequest.result == UnityWebRequest.Result.ProtocolError)
-                {
-                    Debug.LogError("Error logging in: " + webRequest.error);
-                    Debug.LogError("Response: " + webRequest.downloadHandler.text);
-                    ShowErrorPopup();
-                }
-                else
-                {
-                    var response = JsonUtility.FromJson<LoginResponse>(webRequest.downloadHandler.text);
-                    Debug.Log($"Sign in success: {response.user?.id} {response.access_token}");
-
-                    // Store the access token and user metadata for future authenticated requests
-                    PlayerPrefs.SetString("supabase_access_token", response.access_token);
-                    PlayerPrefs.SetString("supabase_user_id", response.user.id);
-                    PlayerPrefs.SetString("supabase_user_email", response.user.email);
-
-                    // Store user metadata (e.g., username) if available
-                    if (response.user.user_metadata != null && response.user.user_metadata.ContainsKey("username"))
-                    {
-                        PlayerPrefs.SetString("supabase_user_username", response.user.user_metadata["username"].ToString());
-                    }
-
-                    // Initialize Supabase client with the logged-in user
-                    SupabaseStuff.Instance?.InitializeSupabaseClient(response.access_token);
-
-                    ShowSuccessPopup();
-
-                    // Clear input fields for security
-                    email.text = "";
-                    password.text = "";
-                }
-            }
+            Debug.LogError("Error logging in: " + webRequest.error);
+            Debug.LogError("Response: " + webRequest.downloadHandler.text);
+            ShowErrorPopup();
         }
+        else
+        {
+            var response = JsonUtility.FromJson<LoginResponse>(webRequest.downloadHandler.text);
+            Debug.Log($"Sign in success: {response.user?.id} {response.access_token}");
 
+            // Store the access token for future authenticated requests
+            PlayerPrefs.SetString("supabase_access_token", response.access_token);
+            PlayerPrefs.SetString("supabase_user_id", response.user.id);
+            PlayerPrefs.SetString("supabase_user_email", response.user.email);
+
+            // Pass the access token to SupabaseStuff and initialize the client
+            SupabaseStuff.Instance.InitializeSupabaseClient(response.access_token);
+
+            ShowSuccessPopup();
+
+            // Clear input fields for security
+            email.text = "";
+            password.text = "";
+        }
+    }
+}
         private void ShowErrorPopup()
         {
             if (loginPopUpNo != null)

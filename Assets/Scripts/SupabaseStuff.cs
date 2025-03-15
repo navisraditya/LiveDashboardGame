@@ -310,30 +310,36 @@ namespace App
 
         private Client _supabase;
 
-        private async void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
+private async void Awake()
+{
+    if (Instance != null && Instance != this)
+    {
+        Destroy(gameObject);
+        return;
+    }
 
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
+    Instance = this;
+    DontDestroyOnLoad(gameObject); // Ensure this object persists across scenes
 
-            if (_supabase == null)
-            {
-                _supabase = new Client(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
-                await InitializeSupabase();
-            }
+    if (_supabase == null)
+    {
+        _supabase = new Client(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
+        await InitializeSupabase();
+    }
 
-            // Check if there's a stored access token and initialize the client with it
-            string accessToken = PlayerPrefs.GetString("supabase_access_token", null);
-            if (!string.IsNullOrEmpty(accessToken))
-            {
-                InitializeSupabaseClient(accessToken);
-            }
-        }
+    // Check if there's a stored access token and initialize the client with it
+    string accessToken = PlayerPrefs.GetString("supabase_access_token", null);
+    if (!string.IsNullOrEmpty(accessToken))
+    {
+        Debug.Log("Initializing Supabase client with stored access token.");
+        InitializeSupabaseClient(accessToken);
+    }
+    else
+    {
+        Debug.Log("No access token found. Supabase client initialized without authentication.");
+    }
+
+}    
 
         private async UniTask InitializeSupabase()
         {
@@ -352,18 +358,43 @@ namespace App
         /// Initializes the Supabase client with a specific access token.
         /// This is used after a user logs in to ensure authenticated requests.
         /// </summary>
-        public void InitializeSupabaseClient(string accessToken)
-        {
-            if (_supabase == null)
-            {
-                _supabase = new Client(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
-            }
+public void InitializeSupabaseClient(string accessToken)
+{
+    if (_supabase == null)
+    {
+        _supabase = new Client(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
+    }
 
-            // Set the access token for authenticated requests
-            _supabase.Auth.SetAuth(accessToken);
-            Debug.Log("Supabase client initialized with access token.");
-        }
+    // Set the access token for authenticated requests
+    _supabase.Auth.SetAuth(accessToken);
+    Debug.Log("Supabase client initialized with access token.");
+}
 
+public User GetLoggedInUser()
+{
+    if (_supabase == null)
+    {
+        Debug.LogError("Supabase client is not initialized.");
+        return null;
+    }
+
+    var session = _supabase.Auth.CurrentSession;
+    if (session == null)
+    {
+        Debug.Log("No active session found.");
+        return null;
+    }
+
+    var user = _supabase.Auth.CurrentUser;
+    if (user == null)
+    {
+        Debug.Log("No user is currently logged in.");
+        return null;
+    }
+
+    Debug.Log($"Logged in user: {user.Email}");
+    return user;
+}
         public async UniTask<User> RegisterUser(string email, string password, string username)
         {
             if (_supabase == null)
@@ -457,32 +488,6 @@ namespace App
         public Client GetSupabaseClient()
         {
             return _supabase;
-        }
-
-        public User GetLoggedInUser()
-        {
-            if (_supabase == null)
-            {
-                Debug.LogError("Supabase client is not initialized.");
-                return null;
-            }
-
-            var session = _supabase.Auth.CurrentSession;
-            if (session == null)
-            {
-                Debug.Log("No active session found.");
-                return null;
-            }
-
-            var user = _supabase.Auth.CurrentUser;
-            if (user == null)
-            {
-                Debug.Log("No user is currently logged in.");
-                return null;
-            }
-
-            Debug.Log($"Logged in user: {user.Email}");
-            return user;
         }
 
         public bool CheckLoggedInUser()

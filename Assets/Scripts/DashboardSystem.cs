@@ -136,13 +136,13 @@ public class DashboardSystem : MonoBehaviour
         await UpdateLeaderboardUI();
     }
 
-    private async UniTask UpdateLeaderboardUI()
-    {
-        loading.gameObject.SetActive(true);
-        await UpdateLeaderboard();
-        Debug.Log("udah selesai");
-        loading.gameObject.SetActive(false);
-    }
+    // private async UniTask UpdateLeaderboardUI()
+    // {
+    //     loading.gameObject.SetActive(true);
+    //     await UpdateLeaderboard();
+    //     Debug.Log("udah selesai");
+    //     loading.gameObject.SetActive(false);
+    // }
 
     // private async UniTask UpdateLeaderboard()
     // {
@@ -216,7 +216,24 @@ public class DashboardSystem : MonoBehaviour
     //     }
     // }
 
-    private async UniTask UpdateLeaderboard()
+private async UniTask UpdateLeaderboardUI()
+{
+    loading.gameObject.SetActive(true);
+
+    // Ensure Supabase client is initialized
+    if (SupabaseStuff.Instance == null || SupabaseStuff.Instance.GetSupabaseClient() == null)
+    {
+        Debug.LogError("Supabase client is not initialized.");
+        loading.gameObject.SetActive(false);
+        return;
+    }
+
+    await UpdateLeaderboard();
+    Debug.Log("Leaderboard update complete.");
+    loading.gameObject.SetActive(false);
+}
+
+private async UniTask UpdateLeaderboard()
 {
     var user = SupabaseStuff.Instance.GetLoggedInUser();
 
@@ -251,7 +268,6 @@ public class DashboardSystem : MonoBehaviour
         }
     }
 }
-
     private async UniTask<List<Score>> FetchScores(int limit)
     {
         string url = $"{SUPABASE_URL}/rest/v1/scores?select=id,player_id,score,playtime&order=score.desc&limit={limit}";
