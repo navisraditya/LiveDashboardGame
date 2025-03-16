@@ -63,16 +63,16 @@ public class DashboardSystem : MonoBehaviour
 
         if(topscores != null) {
             foreach(var score in topscores) {
-                leaderboard.text += $"{scoreIdx}.     {score.PlayerId,-15} {score.ScoreValue}\n";
+                leaderboard.text += $"{scoreIdx}.     {score.player_id,-15} {score.score}\n";
                 if(user != null) {
-                    if(user.UserMetadata["username"].ToString() == score.PlayerId) {
+                    if(user.UserMetadata["username"].ToString() == score.player_id) {
                         if(currRank == 0) {
                             currRank = scoreIdx;
                         }
                         playerAttempt++;
                         totalPlaytime += score.playtime;
-                        if(highestScore >= score.ScoreValue) {
-                            highestScore = score.ScoreValue;
+                        if(highestScore >= score.score) {
+                            highestScore = score.score;
                         }
                     }
                 }
@@ -91,7 +91,8 @@ public class DashboardSystem : MonoBehaviour
             statsDetail.text += $"Total Playtimes:     {totalPlaytime,15} seconds\n";
         }
 
-        topPlayerDetail.text += $"{topscores.First().PlayerId.ToString()}";
+        topPlayerDetail.text += $"{topscores.First().player_id}";
+        Debug.Log($"{topscores.First().player_id}");
 
         yourRankDetail.text += $"{currRank}";
     }

@@ -66,8 +66,8 @@ public class ScoreManager : MonoBehaviour
 
         var newScore = new ScoreModel
         {
-            PlayerId = user.UserMetadata["username"].ToString(),
-            ScoreValue = score,
+            player_id = user.UserMetadata["username"].ToString(),
+            score = score,
             playtime = playtime,
         };
 
@@ -145,16 +145,26 @@ public class ScoreManager : MonoBehaviour
             // Debug.Log("makan nih list");
             // return wrapper.scores ?? new List<ScoreModel>();
             var scores = JsonConvert.DeserializeObject<List<ScoreModel>>(webRequest.downloadHandler.text);
-            return scores ?? new List<ScoreModel>();
+            Debug.Log("Raw JSON Response: " + webRequest.downloadHandler.text);
 
+            if (scores == null)
+            {
+                Debug.LogWarning("Deserialization returned null.");
+            }
+            else
+            {
+                Debug.Log($"Number of scores fetched: {scores.Count}");
+                foreach (var score in scores)
+                {
+                    Debug.Log($"ID: {score.Id}, Player ID: {score.player_id}, Score: {score.score}, Playtime: {score.playtime}");
+                }
+            }
+
+            return scores;
         }
     }
 
     public void SetPlaytime(float timerPlaytime) {
         playtime = timerPlaytime;
-    }
-
-    private class ScoreWrapper {
-        public List<ScoreModel> scores;
     }
 }

@@ -21,7 +21,7 @@ public class Leaderboard : MonoBehaviour
         scoreIdx = 1;
         var topscores = await ScoreManager.Instance.FetchScores(topScoreLimit);
         foreach(var score in topscores) {
-            leaderboard.text += $"{scoreIdx}.     {score.PlayerId,-15} {score.ScoreValue}\n";
+            leaderboard.text += $"{scoreIdx}.     {score.player_id,-15} {score.score}\n";
             scoreIdx++;
         }
         Debug.Log("udah selesai");

@@ -9,10 +9,10 @@ public class ScoreModel : BaseModel
     public int? Id { get; set; }
     
     [Column("player_id")]
-    public string PlayerId { get; set; }
+    public string player_id { get; set; }
     
     [Column("score")]
-    public int ScoreValue { get; set; }
+    public int score { get; set; }
     
     [Column("timestamp")]
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
