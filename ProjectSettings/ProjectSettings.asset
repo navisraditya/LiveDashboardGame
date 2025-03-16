@@ -12,12 +12,12 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Testing
-  productName: DoodleJumpDashLead
+  companyName: DefaultCompany
+  productName: LiveDashboardGame
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
-  m_ShowUnitySplashScreen: 0
+  m_SplashScreenBackgroundColor: {r: 0.12156863, g: 0.12156863, b: 0.1254902, a: 1}
+  m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
@@ -42,12 +42,12 @@ PlayerSettings:
   m_SplashScreenLogos: []
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
-  defaultScreenWidth: 550
-  defaultScreenHeight: 978
-  defaultScreenWidthWeb: 550
-  defaultScreenHeightWeb: 978
+  defaultScreenWidth: 1920
+  defaultScreenHeight: 1080
+  defaultScreenWidthWeb: 960
+  defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 1
+  m_ActiveColorSpace: 0
   unsupportedMSAAFallback: 0
   m_SpriteBatchMaxVertexCount: 65535
   m_SpriteBatchVertexThreshold: 300
@@ -105,8 +105,8 @@ PlayerSettings:
   xboxEnableKinectAutoTracking: 0
   xboxEnableFitness: 0
   visibleInBackground: 1
-  allowFullscreenSwitch: 0
-  fullscreenMode: 3
+  allowFullscreenSwitch: 1
+  fullscreenMode: 1
   xboxSpeechDB: 0
   xboxEnableHeadOrientation: 0
   xboxEnableGuest: 0
@@ -163,14 +163,13 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
-  applicationIdentifier:
-    Standalone: com.DefaultCompany.2D-URP
+  applicationIdentifier: {}
   buildNumber:
     Standalone: 0
     VisionOS: 0
     iPhone: 0
     tvOS: 0
-  overrideDefaultApplicationIdentifier: 1
+  overrideDefaultApplicationIdentifier: 0
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 23
   AndroidTargetSdkVersion: 0
@@ -284,7 +283,7 @@ PlayerSettings:
   AndroidMinifyRelease: 0
   AndroidMinifyDebug: 0
   AndroidValidateAppBundleSize: 1
-  AndroidAppBundleSizeToValidate: 150
+  AndroidAppBundleSizeToValidate: 200
   AndroidReportGooglePlayAppDependencies: 1
   androidSymbolsSizeThreshold: 800
   m_BuildTargetIcons: []
@@ -304,6 +303,7 @@ PlayerSettings:
     PRODUCT_DESCRIPTION: 
   mobileMTRendering:
     Android: 1
+    VisionOS: 1
     iPhone: 1
     tvOS: 1
   m_BuildTargetGroupLightmapEncodingQuality: []
@@ -450,7 +450,7 @@ PlayerSettings:
   switchSystemResourceMemory: 16777216
   switchSupportedNpadStyles: 22
   switchNativeFsCacheSize: 32
-  switchIsHoldTypeHorizontal: 0
+  switchIsHoldTypeHorizontal: 1
   switchSupportedNpadCount: 8
   switchEnableTouchScreen: 1
   switchSocketConfigEnabled: 0
@@ -464,7 +464,7 @@ PlayerSettings:
   switchSocketInitializeEnabled: 1
   switchNetworkInterfaceManagerInitializeEnabled: 1
   switchDisableHTCSPlayerConnection: 0
-  switchUseNewStyleFilepaths: 0
+  switchUseNewStyleFilepaths: 1
   switchUseLegacyFmodPriorities: 0
   switchUseMicroSleepForYield: 1
   switchEnableRamDiskSupport: 0
@@ -552,21 +552,21 @@ PlayerSettings:
   blurSplashScreenBackground: 1
   spritePackerPolicy: 
   webGLMemorySize: 32
-  webGLExceptionSupport: 1
-  webGLNameFilesAsHashes: 0
+  webGLExceptionSupport: 2
+  webGLNameFilesAsHashes: 1
   webGLShowDiagnostics: 0
   webGLDataCaching: 1
   webGLDebugSymbols: 0
   webGLEmscriptenArgs: 
   webGLModulesDirectory: 
-  webGLTemplate: APPLICATION:PWA
+  webGLTemplate: APPLICATION:Default
   webGLAnalyzeBuildSize: 0
   webGLUseEmbeddedResources: 0
   webGLCompressionFormat: 2
   webGLWasmArithmeticExceptions: 0
   webGLLinkerTarget: 1
-  webGLThreadsSupport: 0
-  webGLDecompressionFallback: 0
+  webGLThreadsSupport: 1
+  webGLDecompressionFallback: 1
   webGLInitialMemorySize: 32
   webGLMaximumMemorySize: 2048
   webGLMemoryGrowthMode: 2
@@ -579,30 +579,14 @@ PlayerSettings:
   webGLWebAssemblyBigInt: 0
   webGLCloseOnQuit: 0
   webWasm2023: 0
-  scriptingDefineSymbols:
-    WebGL: 
+  scriptingDefineSymbols: {}
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend:
-    Android: 1
+  scriptingBackend: {}
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   il2cppStacktraceInformation: {}
-  managedStrippingLevel:
-    Android: 1
-    EmbeddedLinux: 1
-    GameCoreScarlett: 1
-    GameCoreXboxOne: 1
-    Nintendo Switch: 1
-    PS4: 1
-    PS5: 1
-    QNX: 1
-    VisionOS: 1
-    WebGL: 1
-    Windows Store Apps: 1
-    XboxOne: 1
-    iPhone: 1
-    tvOS: 1
+  managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
   allowUnsafeCode: 0
@@ -615,14 +599,14 @@ PlayerSettings:
   editorAssembliesCompatibilityLevel: 1
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: DoodleJumpDashLead
+  metroPackageName: LiveDashboardGame
   metroPackageVersion: 
   metroCertificatePath: 
   metroCertificatePassword: 
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: DoodleJumpDashLead
+  metroApplicationDescription: LiveDashboardGame
   wsaImages: {}
   metroTileShortName: 
   metroTileShowName: 0
@@ -684,7 +668,7 @@ PlayerSettings:
     m_VersionCode: 1
     m_VersionName: 
   hmiPlayerDataPath: 
-  hmiForceSRGBBlit: 1
+  hmiForceSRGBBlit: 0
   embeddedLinuxEnableGamepadInput: 0
   hmiCpuConfiguration: 
   hmiLogStartupTiming: 0
@@ -693,11 +677,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 16853616-b5fd-4d32-aac5-93d03dd82028
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: LiveDashboardGame
+  organizationId: navisraditya
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

@@ -2,13 +2,15 @@ using TMPro;
 using UnityEngine;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Postgrest;
-using System.Linq;
 using System;
 using App;
+using Cysharp.Threading.Tasks;
+using UnityEngine.Networking;
+using Newtonsoft.Json;
 
 public class ScoreManager : MonoBehaviour
 {
+
     public static ScoreManager Instance { get; private set; }
 
     public TMP_Text scoreUI;
@@ -21,6 +23,7 @@ public class ScoreManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -89,32 +92,69 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public async Task<List<ScoreModel>> FetchScores(int limit = 20)
+    // public async Task<List<ScoreModel>> FetchScores(int limit = 20)
+    // {
+    //     if (SupabaseStuff.Instance == null)
+    //     {
+    //         Debug.LogError("Supabase error: Instance is null.");
+    //         return new List<ScoreModel>();
+    //     }
+
+    //     var response = await SupabaseStuff.Instance.GetSupabaseClient()
+    //         .From<ScoreModel>()
+    //         .Select("*")
+    //         .Order("score", Constants.Ordering.Descending)
+    //         .Limit(limit)
+    //         .Get();
+
+    //     if (response != null)
+    //     {
+    //         return response.Models.ToList();
+    //     }
+    //     else
+    //     {
+    //         Debug.Log("No scores found.");
+    //         return new List<ScoreModel>();
+    //     }
+    // }
+
+    public async UniTask<List<ScoreModel>> FetchScores(int limit)
     {
-        if (SupabaseStuff.Instance == null)
-        {
-            Debug.LogError("Supabase error: Instance is null.");
-            return new List<ScoreModel>();
-        }
 
-        var response = await SupabaseStuff.Instance.GetSupabaseClient()
-            .From<ScoreModel>()
-            .Select("*")
-            .Order("score", Constants.Ordering.Descending)
-            .Limit(limit)
-            .Get();
+        string url = $"{SupabaseStuff.Instance.GetURL()}/rest/v1/scores?select=id,player_id,score,playtime&order=score.desc&limit={limit}";
+        using UnityWebRequest webRequest = UnityWebRequest.Get(url);
+        webRequest.SetRequestHeader("apikey", SupabaseStuff.Instance.GetAPIKey());
+        webRequest.SetRequestHeader("Authorization", $"Bearer {SupabaseStuff.Instance.GetAPIKey()}");
 
-        if (response != null)
+
+        await webRequest.SendWebRequest();
+
+        if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
+            webRequest.result == UnityWebRequest.Result.ProtocolError)
         {
-            return response.Models.ToList();
+            Debug.LogError("gk dibolehin");
+            Debug.LogError("Error fetching scores: " + webRequest.error);
+            Debug.LogError("Response: " + webRequest.downloadHandler.text);
+            return null;
         }
         else
         {
-            Debug.Log("No scores found.");
-            return new List<ScoreModel>();
+            // // Wrap the JSON array in an object to make it compatible with JsonUtility
+            // string jsonResponse = $"{{\"scores\":{webRequest.downloadHandler.text}}}";
+            // var wrapper = JsonUtility.FromJson<ScoreWrapper>(jsonResponse);
+            // Debug.Log("makan nih list");
+            // return wrapper.scores ?? new List<ScoreModel>();
+            var scores = JsonConvert.DeserializeObject<List<ScoreModel>>(webRequest.downloadHandler.text);
+            return scores ?? new List<ScoreModel>();
+
         }
     }
+
     public void SetPlaytime(float timerPlaytime) {
         playtime = timerPlaytime;
+    }
+
+    private class ScoreWrapper {
+        public List<ScoreModel> scores;
     }
 }

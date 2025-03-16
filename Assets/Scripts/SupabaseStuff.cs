@@ -11,9 +11,9 @@ using RequestException = Postgrest.RequestException;
 
 namespace App {
     public class SupabaseStuff : MonoBehaviour {
-    public static SupabaseStuff Instance { get; private set;}
-    public const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
-    public const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
+        public static SupabaseStuff Instance { get; private set;}
+        private const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
+        private const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
         // public TMP_InputField result;
         public TMP_InputField email;
         public TMP_InputField password;
@@ -22,7 +22,7 @@ namespace App {
         // private string _id;
         // private string _nonce;
 
-        private async void Awake() {
+        private async void Start() {
             if (Instance != null && Instance != this) {
                 Destroy(gameObject);
                 return;
@@ -281,5 +281,13 @@ namespace App {
     //         _id = identityToken;
     //         _nonce = nonce;
     //     }
-    }
+
+            public string GetURL(){
+                return SUPABASE_URL;
+            }
+
+            public string GetAPIKey() {
+                return SUPABASE_PUBLIC_KEY;
+            }
+        }
 }

@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Cysharp.Threading.Tasks;
-using Postgrest.Responses;
 using Supabase.Gotrue;
 using TMPro;
 using UnityEngine;
 using Client = Supabase.Client;
-using RequestException = Postgrest.RequestException;
 
 namespace App {
     public class RegisButton : MonoBehaviour {

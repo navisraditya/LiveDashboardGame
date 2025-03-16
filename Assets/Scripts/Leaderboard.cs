@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using App;
-using NUnit.Framework;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class Leaderboard : MonoBehaviour
 {
@@ -26,7 +21,7 @@ public class Leaderboard : MonoBehaviour
         scoreIdx = 1;
         var topscores = await ScoreManager.Instance.FetchScores(topScoreLimit);
         foreach(var score in topscores) {
-            leaderboard.text += $"{scoreIdx}.     {score.PlayerId.PadRight(15)} {score.ScoreValue}\n";
+            leaderboard.text += $"{scoreIdx}.     {score.PlayerId,-15} {score.ScoreValue}\n";
             scoreIdx++;
         }
         Debug.Log("udah selesai");
