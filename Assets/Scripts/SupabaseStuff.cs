@@ -158,17 +158,25 @@ namespace App {
         //     return null;
         // }
 
-        public User GetLoggedInUser() {
+        private AuthResponse GetAuthResponse() {
             string userJson = PlayerPrefs.GetString("logged_in_user", "");
             if (string.IsNullOrEmpty(userJson)) return null;
 
             try {
                 var response = JsonConvert.DeserializeObject<AuthResponse>(userJson);
-                return response?.User;
+                return response;
             } catch (Exception e) {
                 Debug.LogError("Error parsing logged-in user JSON: " + e.Message);
                 return null;
             }
+        }
+
+        public User GetLoggedInUser() {
+            return GetAuthResponse()?.User;
+        }
+
+        public string GetLoggedInUserACT() {
+            return GetAuthResponse()?.AccessToken;
         }
         
         public bool CheckLoggedInUser() {
@@ -248,7 +256,12 @@ namespace App {
                 return SUPABASE_PUBLIC_KEY;
             }
 
-            public class AuthResponse {
+        internal void ClearUserSession()
+        {
+            PlayerPrefs.DeleteAll();
+        }
+
+        public class AuthResponse {
                 [JsonProperty("access_token")]
                 public string AccessToken { get; set; }
 

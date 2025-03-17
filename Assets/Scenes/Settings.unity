@@ -474,6 +474,7 @@ RectTransform:
   - {fileID: 1066215137}
   - {fileID: 1910579610}
   - {fileID: 1180537218}
+  - {fileID: 227628861}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -772,8 +773,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 227628861}
-  - component: {fileID: 227628862}
   - component: {fileID: 227628863}
+  - component: {fileID: 227628864}
   m_Layer: 5
   m_Name: LogOut
   m_TagString: Untagged
@@ -788,21 +789,33 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227628860}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2063315745}
   - {fileID: 738780689}
-  m_Father: {fileID: 1066215137}
+  m_Father: {fileID: 93315963}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -520}
+  m_AnchoredPosition: {x: 55, y: -520}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &227628862
+--- !u!225 &227628863
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 227628860}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &227628864
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -815,18 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logOutCanvasGroup: {fileID: 227628863}
---- !u!225 &227628863
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 227628860}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 0
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  logoutBtn: {fileID: 738780691}
 --- !u!1 &251819606
 GameObject:
   m_ObjectHideFlags: 0
@@ -2931,7 +2933,6 @@ GameObject:
   - component: {fileID: 738780693}
   - component: {fileID: 738780692}
   - component: {fileID: 738780691}
-  - component: {fileID: 738780694}
   m_Layer: 5
   m_Name: '[Button] Logout'
   m_TagString: Untagged
@@ -3002,9 +3003,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 738780694}
-        m_TargetAssemblyTypeName: logoutbutton, Assembly-CSharp
-        m_MethodName: LogoutUser
+      - m_Target: {fileID: 227628864}
+        m_TargetAssemblyTypeName: LogOut, Assembly-CSharp
+        m_MethodName: LogOutUser
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3052,18 +3053,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738780688}
   m_CullTransparentMesh: 1
---- !u!114 &738780694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 738780688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 460afbe318d2e4a4e85cbbed2dd5f857, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &746239753
 GameObject:
   m_ObjectHideFlags: 0
@@ -4067,6 +4056,7 @@ MonoBehaviour:
   loginCanvasGroup: {fileID: 1910579611}
   loginPopUpNo: {fileID: 2020042717}
   loginPopUpYes: {fileID: 1979615748}
+  logOutBtn: {fileID: 227628863}
 --- !u!1 &1033644464
 GameObject:
   m_ObjectHideFlags: 0
@@ -4277,7 +4267,6 @@ RectTransform:
   - {fileID: 2081595384}
   - {fileID: 329680081}
   - {fileID: 2024752593}
-  - {fileID: 227628861}
   m_Father: {fileID: 93315963}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

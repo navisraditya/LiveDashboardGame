@@ -22,6 +22,7 @@ namespace App {
         [SerializeField] CanvasGroup loginCanvasGroup;
         [SerializeField] CanvasGroup loginPopUpNo;
         [SerializeField] CanvasGroup loginPopUpYes;
+        [SerializeField] CanvasGroup logOutBtn;
 
         private void Awake() {
             _supabase = SupabaseStuff.Instance?.GetSupabaseClient();
@@ -31,6 +32,7 @@ namespace App {
             }
         }
         
+        // buat di leaderboard
         public async void LoginClose() {
             await SupabaseStuff.Instance.LoginBackend(email.text, password.text);
             loginCanvasGroup.gameObject.SetActive(false);
@@ -40,12 +42,22 @@ namespace App {
             SceneManager.LoadScene("Leaderboard");
         }
 
+        // buat di dashboard
         public async void LoginUser() {
             await SupabaseStuff.Instance.LoginBackend(email.text, password.text);
             _ = SupabaseStuff.Instance.GetLoggedInUser();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        // buat di settings
+        public async void LoginUserSetting(){
+            await SupabaseStuff.Instance.LoginBackend(email.text, password.text);
+            _ = SupabaseStuff.Instance.GetLoggedInUser();
+            loginCanvasGroup.gameObject.SetActive(false);
+            logOutBtn.gameObject.SetActive(true);
+        }
+
+        // buat kalau mau langsung ganti scene
         public async void LoginUser(string targetWindow) {
             await SupabaseStuff.Instance.LoginBackend(email.text, password.text);
             _ = SupabaseStuff.Instance.GetLoggedInUser();
