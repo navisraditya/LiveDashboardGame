@@ -100,12 +100,12 @@ public class ScoreManager : MonoBehaviour
     //     }
     // }
 
-    public async Task SaveScoreToSupabase()
+    public async UniTask SaveScoreToSupabase()
     {
         string url = $"{SupabaseStuff.Instance.GetURL()}/rest/v1/scores";
         
 
-        SupabaseStuff.User user =  SupabaseStuff.Instance.GetLoggedInUser();
+        User user = SupabaseStuff.Instance.GetLoggedInUser();
         if(user == null) {
             Debug.Log("user kosong gk bisa store data");
             return;
@@ -132,7 +132,9 @@ public class ScoreManager : MonoBehaviour
 
             request.SetRequestHeader("Content-Type", "application/json");
             request.SetRequestHeader("apikey", SupabaseStuff.Instance.GetAPIKey());
-            request.SetRequestHeader($"Authorization", "Bearer " + SupabaseStuff.Instance.GetLoggedInUserACT());
+            // request.SetRequestHeader($"Authorization", "Bearer " + SupabaseStuff.Instance.GetLoggedInUserACT());
+            request.SetRequestHeader("Authorization", $"Bearer {SupabaseStuff.Instance.GetLoggedInUserACT()}");
+
 
             await request.SendWebRequest();
             // request.SetRequestHeader("Authorization", $"Bearer {SupabaseStuff.Instance.GetAPIKey()}");
