@@ -7,7 +7,7 @@ public class LoseCondition : MonoBehaviour
     public static LoseCondition Instance {get; set;}
     public bool isLoggedIn = false;
     public SceneLoader sceneLoader;
-    [SerializeField] private Timer timer;
+    // [SerializeField] private Timer timer;
     [SerializeField] private float timerTime = 3f;
     [SerializeField] private CanvasGroup loginCanvas;
 
@@ -24,8 +24,8 @@ public class LoseCondition : MonoBehaviour
             Time.timeScale = 0.25f;
 
             // Stop the gameplay counter and start the timer
-            timer.StopGameplayCounter();
-            timer.BeginCouting(timerTime);
+            Timer.Instance.StopGameplayCounter();
+            Timer.Instance.BeginCouting(timerTime);
 
             // Check if a user is logged in
             var user = SupabaseStuff.Instance.GetLoggedInUser();

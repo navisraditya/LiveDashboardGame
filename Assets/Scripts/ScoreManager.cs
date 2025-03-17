@@ -18,13 +18,14 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
+            Destroy(gameObject);
         }
         else
         {
-            Destroy(gameObject); // Prevent duplicate ScoreManager instances
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
     }
 
