@@ -137,16 +137,16 @@ namespace App {
         public void RegisLogin()
         {
             RegisterUser();
-            regisPopUpYes.gameObject.SetActive(true);
+            // regisPopUpYes.gameObject.SetActive(true);
             
-            Timer.Instance.BeginCouting(3);
-            if(Timer.Instance.isCounting) {
-                regisCanvasGroup.gameObject.SetActive(false);
-            }
-            Timer.Instance.BeginCouting(3);
-            if(Timer.Instance.isCounting) {
-                loginCanvasGroup.gameObject.SetActive(true);
-            }
+            // Timer.Instance.BeginCouting(3);
+            // if(Timer.Instance.isCounting) {
+            //     regisCanvasGroup.gameObject.SetActive(false);
+            // }
+            // Timer.Instance.BeginCouting(3);
+            // if(Timer.Instance.isCounting) {
+            //     loginCanvasGroup.gameObject.SetActive(true);
+            // }
 
         }
 

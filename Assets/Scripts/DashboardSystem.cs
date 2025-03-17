@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using App;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -92,8 +93,7 @@ public class DashboardSystem : MonoBehaviour
             statsDetail.text += $"Total Playtimes:     {totalPlaytime,15} seconds\n";
         }
 
-        topPlayerDetail.text += $"{topscores.First().Player_id}";
-        Debug.Log($"{topscores.First().Player_id}");
+        topPlayerDetail.text += topscores?.FirstOrDefault()?.Player_id ?? "N/A";
 
         yourRankDetail.text += $"{currRank}";
     }
