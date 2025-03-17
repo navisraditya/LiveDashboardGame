@@ -811,8 +811,8 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227628860}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
+  m_Alpha: 0
+  m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &227628864
@@ -828,7 +828,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logOutCanvasGroup: {fileID: 227628863}
-  logoutBtn: {fileID: 738780691}
 --- !u!1 &251819606
 GameObject:
   m_ObjectHideFlags: 0

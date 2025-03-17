@@ -103,9 +103,7 @@ public class ScoreManager : MonoBehaviour
     public async Task SaveScoreToSupabase()
     {
         string url = $"{SupabaseStuff.Instance.GetURL()}/rest/v1/scores";
-        using UnityWebRequest request = new(url, "POST");
-        request.SetRequestHeader("Content-Type", "application/json");
-        request.SetRequestHeader("apikey", SupabaseStuff.Instance.GetAPIKey());
+        
 
         SupabaseStuff.User user =  SupabaseStuff.Instance.GetLoggedInUser();
         if(user == null) {
@@ -114,7 +112,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         if(!user.UserMetadata.IsUnityNull()){
-            string username = user.UserMetadata.Username.ToString();
+            string username = user.UserMetadata.Username;
             var newScore = new ScoreModel{
                 Player_id = username,
                 Score = score,
@@ -125,8 +123,16 @@ public class ScoreManager : MonoBehaviour
             Debug.LogWarning($"JSON yang dikirim dari ScoreManager: {jsonData}");
 
             byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
+            
+            using UnityWebRequest request = new(url, "POST"){
+                uploadHandler = new UploadHandlerRaw(bodyRaw),
+                downloadHandler = new DownloadHandlerBuffer(),
+            };
+
+
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("apikey", SupabaseStuff.Instance.GetAPIKey());
+            request.SetRequestHeader($"Authorization", "Bearer " + SupabaseStuff.Instance.GetLoggedInUserACT());
 
             await request.SendWebRequest();
             // request.SetRequestHeader("Authorization", $"Bearer {SupabaseStuff.Instance.GetAPIKey()}");
