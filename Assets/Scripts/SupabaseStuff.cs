@@ -1,19 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Linq;
+using Newtonsoft.Json;
 using Postgrest.Responses;
 using Supabase.Gotrue;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 using Client = Supabase.Client;
 using RequestException = Postgrest.RequestException;
 
 namespace App {
     public class SupabaseStuff : MonoBehaviour {
-    public static SupabaseStuff Instance { get; private set;}
-    public const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
-    public const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
+        public static SupabaseStuff Instance { get; private set;}
+        private const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
+        private const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
+        private string SUPABASE_USER_ACCESS_TOKEN;
         // public TMP_InputField result;
         public TMP_InputField email;
         public TMP_InputField password;
@@ -22,7 +29,7 @@ namespace App {
         // private string _id;
         // private string _nonce;
 
-        private async void Awake() {
+        private async void Start() {
             if (Instance != null && Instance != this) {
                 Destroy(gameObject);
                 return;
@@ -34,120 +41,9 @@ namespace App {
 
             if (_supabase == null) {
                 _supabase = new Client(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
-                await _supabase.InitializeAsync();
+                _ = await _supabase.InitializeAsync();
                 Debug.Log("supabase intiated");
-            }
-        }
-
-        public async void RegisterUser() {
-            Task<Session> signUp = _supabase.Auth.SignUp(email.text, password.text);
-            try {
-                await signUp;
-            } catch (BadRequestException badRequestException) {
-                Debug.Log("BadRequestException") ;
-                Debug.Log($"{badRequestException.Message}") ;
-                Debug.Log($"{badRequestException.Content}") ;
-                Debug.Log($"{badRequestException.StackTrace}") ;
-                return;
-            } catch (UnauthorizedException unauthorizedException) {
-                Debug.Log("UnauthorizedException") ;
-                Debug.Log(unauthorizedException.Message) ;
-                Debug.Log(unauthorizedException.Content) ;
-                Debug.Log(unauthorizedException.StackTrace) ;
-                return;
-            } catch (ExistingUserException existingUserException) {
-                Debug.Log("ExistingUserException") ;
-                Debug.Log(existingUserException.Message) ;
-                Debug.Log(existingUserException.Content) ;
-                Debug.Log(existingUserException.StackTrace) ;
-                return;
-            } catch (ForbiddenException forbiddenException) {
-                Debug.Log("ForbiddenException") ;
-                Debug.Log(forbiddenException.Message) ;
-                Debug.Log(forbiddenException.Content) ;
-                Debug.Log(forbiddenException.StackTrace) ;
-                return;
-            // } catch (InvalidProviderException invalidProviderException) {
-            //     Debug.Log() "invalidProviderException";
-            //     Debug.Log() invalidProviderException.Message;
-            //     Debug.Log() invalidProviderException.StackTrace;
-            //     return;
-            } catch (InvalidEmailOrPasswordException invalidEmailOrPasswordException) {
-                Debug.Log("invalidEmailOrPasswordException") ;
-                Debug.Log(invalidEmailOrPasswordException.Message) ;
-                Debug.Log(invalidEmailOrPasswordException.Content) ;
-                Debug.Log(invalidEmailOrPasswordException.StackTrace) ;
-                return;
-            } catch (Exception exception) {
-                Debug.Log("unknown exception") ;
-                Debug.Log(exception.Message) ;
-                Debug.Log(exception.StackTrace) ;
-                return;
-            }
-
-            Session session = signUp.Result;
-
-            Debug.Log($"Supabase sign in user id: {session?.User?.Id}");
-        }
-
-        public async void LogInUser() {
-            Debug.Log("starting sign up");
-            Task<Session> signUp = _supabase.Auth.SignInWithPassword(email.text, password.text);
-            try {
-                await signUp;
-            } catch (BadRequestException badRequestException) {
-                Debug.Log("BadRequestException") ;
-                Debug.Log($"{badRequestException.Message}") ;
-                Debug.Log($"{badRequestException.Content}") ;
-                Debug.Log($"{badRequestException.StackTrace}") ;
-                return;
-            } catch (UnauthorizedException unauthorizedException) {
-                Debug.Log("UnauthorizedException") ;
-                Debug.Log(unauthorizedException.Message) ;
-                Debug.Log(unauthorizedException.Content) ;
-                Debug.Log(unauthorizedException.StackTrace) ;
-                return;
-            } catch (ExistingUserException existingUserException) {
-                Debug.Log("ExistingUserException") ;
-                Debug.Log(existingUserException.Message) ;
-                Debug.Log(existingUserException.Content) ;
-                Debug.Log(existingUserException.StackTrace) ;
-                return;
-            } catch (ForbiddenException forbiddenException) {
-                Debug.Log("ForbiddenException") ;
-                Debug.Log(forbiddenException.Message) ;
-                Debug.Log(forbiddenException.Content) ;
-                Debug.Log(forbiddenException.StackTrace) ;
-                return;
-            // } catch (InvalidProviderException invalidProviderException) {
-            //     Debug.Log() "invalidProviderException";
-            //     Debug.Log() invalidProviderException.Message;
-            //     Debug.Log() invalidProviderException.StackTrace;
-            //     return;
-            } catch (InvalidEmailOrPasswordException invalidEmailOrPasswordException) {
-                Debug.Log("invalidEmailOrPasswordException") ;
-                Debug.Log(invalidEmailOrPasswordException.Message) ;
-                Debug.Log(invalidEmailOrPasswordException.Content) ;
-                Debug.Log(invalidEmailOrPasswordException.StackTrace) ;
-                return;
-            } catch (Exception exception) {
-                Debug.Log("unknown exception") ;
-                Debug.Log(exception.Message) ;
-                Debug.Log(exception.StackTrace) ;
-                return;
-            }
-
-            if (!signUp.IsCompletedSuccessfully) {
-                Debug.Log(JsonUtility.ToJson(signUp.Exception));
-                return;
-            }
-
-            Session session = signUp.Result;
-
-            if (session == null)
-                Debug.Log( "nope");
-            else {
-                Debug.Log($"Sign in success {session.User?.Id} {session.AccessToken} {session.User?.Aud} {session.User?.Email} {session.RefreshToken}");
+                PlayerPrefs.DeleteAll();
             }
         }
 
@@ -158,7 +54,7 @@ namespace App {
             Task<BaseResponse> rpc = _supabase.Rpc("hello_js_as_json", param);
             rpc.AsUniTask().GetAwaiter().OnCompleted(Complete);
             try {
-                await rpc;
+                _ = await rpc;
             } catch (RequestException requestException) {
                 Debug.Log($"{requestException.Message}") ;
                 Debug.Log($"\n{requestException.Error}") ;
@@ -192,31 +88,100 @@ namespace App {
             return _supabase;
         }
 
-        public User GetLoggedInUser() {
-                if (_supabase == null) {
-                    Debug.LogError("supabase client is not initialized");
-                    return null;
-                }
+        public async UniTask LoginBackend(string email, string password)
+        {
+            string url = $"{GetURL()}/auth/v1/token?grant_type=password";
+            string jsonData = $"{{\"email\": \"{email}\", \"password\": \"{password}\"}}";
 
-                var session = _supabase.Auth.CurrentSession;
-                if (session == null) {
-                    Debug.Log("no active session found");
-                    return null;
-                }
+            using UnityWebRequest webRequest = new UnityWebRequest(url, "POST");
+            byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+            webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            webRequest.downloadHandler = new DownloadHandlerBuffer();
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+            webRequest.SetRequestHeader("apikey", GetAPIKey());
+            webRequest.SetRequestHeader("Authorization", $"Bearer {GetAPIKey()}");
 
-                var user = _supabase.Auth.CurrentUser;
-                if (user == null) {
-                    Debug.Log("no user is currently logged in");
-                    return null;
-                }
+            _ = await webRequest.SendWebRequest().ToUniTask();
 
-                Debug.Log($"Logged in user: {user.Email}");
-                return user;
+            if (webRequest.result == UnityWebRequest.Result.Success)
+            {
+                string response = webRequest.downloadHandler.text;
+                PlayerPrefs.SetString("logged_in_user", response);
+                PlayerPrefs.Save();
+
+                Debug.Log("berhasil login user");
+            }
+            else
+            {
+                Debug.LogError("gk berhasil login pake restful");
+            }
         }
 
+        // public async Task<User> GetLoggedInUser() {
+        //     string url = $"{GetURL()}/auth/v1/user";
+        //     string acToken = PlayerPrefs.GetString("access_token");
+
+        //     if (string.IsNullOrEmpty(acToken)) {
+        //         Debug.LogError("AcToken kosong");
+        //         return null;
+        //     }
+
+        //     using UnityWebRequest webRequest = new UnityWebRequest(url, "GET") {
+        //         downloadHandler = new DownloadHandlerBuffer(),
+        //     };
+
+        //     webRequest.SetRequestHeader("Authorization", $"Bearer {acToken}");
+        //     webRequest.SetRequestHeader("apikey", GetAPIKey());
+
+        //     _ = await webRequest.SendWebRequest().ToUniTask();
+
+        //     if (webRequest.result == UnityWebRequest.Result.Success) {
+        //         string jsonResponse = webRequest.downloadHandler.text;
+        //         Debug.LogWarning("Raw JSON Response GetLoggedInUser(): " + jsonResponse);
+
+        //         try {
+        //             var resp = JsonConvert.DeserializeObject<AuthResponse>(jsonResponse);
+
+        //             if (resp?.User != null) {
+        //                 Debug.Log("Player ID dari response: " + resp.User.UserMetadata?.Username);
+        //                 return resp.User;
+        //             } else {
+        //                 Debug.LogError("Gagal mendapatkan user dari JSON response.");
+        //             }
+        //         } catch (Exception e) {
+        //             Debug.LogError("Error parsing JSON: " + e.Message);
+        //         }
+        //     } else {
+        //         Debug.LogError("Gagal ambil user login, HTTP error: " + webRequest.error);
+        //     }
+
+        //     return null;
+        // }
+
+        private AuthResponse GetAuthResponse() {
+            string userJson = PlayerPrefs.GetString("logged_in_user", "");
+            if (string.IsNullOrEmpty(userJson)) return null;
+
+            try {
+                var response = JsonConvert.DeserializeObject<AuthResponse>(userJson);
+                return response;
+            } catch (Exception e) {
+                Debug.LogError("Error parsing logged-in user JSON: " + e.Message);
+                return null;
+            }
+        }
+
+        public User GetLoggedInUser() {
+            return GetAuthResponse()?.User;
+        }
+
+        public string GetLoggedInUserACT() {
+            return GetAuthResponse()?.AccessToken;
+        }
+        
         public bool CheckLoggedInUser() {
             var user = GetLoggedInUser();
-            if (user != null){
+            if (user != null) {
                 Debug.Log($"User is logged in: {user.Email}");
                 return true;
             } else {
@@ -224,6 +189,7 @@ namespace App {
                 return false;
             }
         }
+
 
     //     public void ManualAppleSignIn() {
     //         Debug.Log() "starting supabase apple sign in\n";
@@ -281,5 +247,54 @@ namespace App {
     //         _id = identityToken;
     //         _nonce = nonce;
     //     }
-    }
+
+            public string GetURL(){
+                return SUPABASE_URL;
+            }
+
+            public string GetAPIKey() {
+                return SUPABASE_PUBLIC_KEY;
+            }
+
+        internal void ClearUserSession()
+        {
+            PlayerPrefs.DeleteAll();
+        }
+
+        public class AuthResponse {
+                [JsonProperty("access_token")]
+                public string AccessToken { get; set; }
+
+                [JsonProperty("token_type")]
+                public string TokenType { get; set; }
+
+                [JsonProperty("expires_in")]
+                public int ExpiresIn { get; set; }
+
+                [JsonProperty("expires_at")]
+                public long ExpiresAt { get; set; }
+
+                [JsonProperty("refresh_token")]
+                public string RefreshToken { get; set; }
+
+                [JsonProperty("user")]
+                public User User { get; set; }
+            }
+
+            public class User {
+                [JsonProperty("id")]
+                public string Id { get; set; }
+
+                [JsonProperty("email")]
+                public string Email { get; set; }
+
+                [JsonProperty("user_metadata")]
+                public UserMetadata UserMetadata { get; set; }
+            }
+
+            public class UserMetadata {
+                [JsonProperty("username")]
+                public string Username { get; set; }
+            }
+        }
 }

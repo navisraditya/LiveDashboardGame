@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Threading.Tasks;
 using App;
 
 public class LoseCondition : MonoBehaviour
@@ -32,6 +31,7 @@ public class LoseCondition : MonoBehaviour
 
             if (user == null)
             {
+                Debug.LogError("ini di LoseCondition, user kosong");
                 // No user is logged in, open the login canvas
                 OpenLoginCanvas();
 
@@ -47,6 +47,7 @@ public class LoseCondition : MonoBehaviour
                 // User is logged in, save the score and load the leaderboard
                 if (ScoreManager.Instance != null)
                 {
+                    Debug.Log(user);
                     await ScoreManager.Instance.SaveScoreToSupabase(); // Save the score
                     sceneLoader.LoadScene("Leaderboard"); // Load the leaderboard scene
                 }

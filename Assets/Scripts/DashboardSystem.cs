@@ -1,7 +1,8 @@
 using System.Linq;
-using System.Threading.Tasks;
 using App;
+using Cysharp.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DashboardSystem : MonoBehaviour
@@ -19,7 +20,7 @@ public class DashboardSystem : MonoBehaviour
     
     int scoreIdx = 1;
     
-    async void Awake()
+    void Awake()
     {
         if (Instance == null)
         {
@@ -32,65 +33,68 @@ public class DashboardSystem : MonoBehaviour
         }
 
         if(SupabaseStuff.Instance != null) {
-            await UpdateLeaderboardUI();
+            UpdateLeaderboardUI();
         } else {
-            SupabaseStuff.Instance.GetSupabaseClient();
-            await UpdateLeaderboardUI();
+            _ = SupabaseStuff.Instance.GetSupabaseClient();
+            UpdateLeaderboardUI();
         }
     }
 
-    private async Task UpdateLeaderboardUI() {
+    private void UpdateLeaderboardUI() {
         loading.gameObject.SetActive(true);
-        await UpdateLeaderboard();
         
-
-        Debug.Log("udah selesai");
-        loading.gameObject.SetActive(false);
+        UpdateLeaderboard().ContinueWith(() => {
+            Debug.Log("udah selesai");
+            loading.gameObject.SetActive(false);
+        }).Forget();
     }
-
-    private async Task UpdateLeaderboard() {
+    private async UniTask UpdateLeaderboard() {
         var user = SupabaseStuff.Instance.GetLoggedInUser();
         
         scoreIdx = 1;
 
-        int? currRank = null;
+        int currRank = 0;
         int playerAttempt = 0;
         float totalPlaytime = 0;
         int highestScore = 0;
 
         var topscores = await ScoreManager.Instance.FetchScores(topScoreLimit);
+        Debug.Log("udah dapet");
+        Debug.Log(topscores.Count());
 
         if(topscores != null) {
             foreach(var score in topscores) {
-                leaderboard.text += $"{scoreIdx}.     {score.PlayerId.PadRight(15)} {score.ScoreValue}\n";
+                leaderboard.text += $"{scoreIdx}.     {score.Player_id,-15} {score.Score}\n";
                 if(user != null) {
-                    if(user.UserMetadata["username"].ToString() == score.PlayerId) {
-                        if(currRank == null) {
+                    if(user.UserMetadata.Username == score.Player_id) {
+                        if(currRank == 0) {
                             currRank = scoreIdx;
                         }
                         playerAttempt++;
-                        totalPlaytime += score.playtime;
-                        if(highestScore >= score.ScoreValue) {
-                            highestScore = score.ScoreValue;
+                        totalPlaytime += score.Playtime;
+                        if(highestScore >= score.Score) {
+                            highestScore = score.Score;
                         }
                     }
                 }
                 scoreIdx++;
             }
+        } else {
+            Debug.Log("kosong");
         }
 
         if(user == null) {
             loginBanner.gameObject.SetActive(true);
-            currRank = null;
         } else {
             loginBanner.gameObject.SetActive(false);
-            statsDetail.text += $"Total Attempts:     {playerAttempt.ToString().PadLeft(15)} attempts\n";
-            statsDetail.text += $"Highest Scores:     {highestScore.ToString().PadLeft(15)} points\n";
-            statsDetail.text += $"Total Playtimes:     {totalPlaytime.ToString().PadLeft(15)} seconds\n";
+            statsDetail.text += $"Total Attempts:     {playerAttempt,15} attempts\n";
+            statsDetail.text += $"Highest Scores:     {highestScore,15} points\n";
+            statsDetail.text += $"Total Playtimes:     {totalPlaytime,15} seconds\n";
         }
 
-        topPlayerDetail.text += $"{topscores.First().PlayerId.ToString()}";
+        topPlayerDetail.text += $"{topscores.First().Player_id}";
+        Debug.Log($"{topscores.First().Player_id}");
 
-        yourRankDetail.text += $"{currRank.ToString()}";
+        yourRankDetail.text += $"{currRank}";
     }
 }
