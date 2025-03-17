@@ -44,7 +44,7 @@ namespace App {
             };
             Task<Session> signUp = _supabase.Auth.SignUp(email.text, password.text, options);
             try {
-                await signUp;
+                _ = await signUp;
             } catch (BadRequestException badRequestException) {
                 Debug.Log("BadRequestException") ;
                 Debug.Log($"{badRequestException.Message}") ;

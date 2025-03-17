@@ -2,6 +2,7 @@ using System.Linq;
 using App;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DashboardSystem : MonoBehaviour
@@ -34,7 +35,7 @@ public class DashboardSystem : MonoBehaviour
         if(SupabaseStuff.Instance != null) {
             UpdateLeaderboardUI();
         } else {
-            SupabaseStuff.Instance.GetSupabaseClient();
+            _ = SupabaseStuff.Instance.GetSupabaseClient();
             UpdateLeaderboardUI();
         }
     }
@@ -63,16 +64,16 @@ public class DashboardSystem : MonoBehaviour
 
         if(topscores != null) {
             foreach(var score in topscores) {
-                leaderboard.text += $"{scoreIdx}.     {score.player_id,-15} {score.score}\n";
+                leaderboard.text += $"{scoreIdx}.     {score.Player_id,-15} {score.Score}\n";
                 if(user != null) {
-                    if(user.UserMetadata["username"].ToString() == score.player_id) {
+                    if(user.UserMetadata.Username == score.Player_id) {
                         if(currRank == 0) {
                             currRank = scoreIdx;
                         }
                         playerAttempt++;
-                        totalPlaytime += score.playtime;
-                        if(highestScore >= score.score) {
-                            highestScore = score.score;
+                        totalPlaytime += score.Playtime;
+                        if(highestScore >= score.Score) {
+                            highestScore = score.Score;
                         }
                     }
                 }
@@ -91,8 +92,8 @@ public class DashboardSystem : MonoBehaviour
             statsDetail.text += $"Total Playtimes:     {totalPlaytime,15} seconds\n";
         }
 
-        topPlayerDetail.text += $"{topscores.First().player_id}";
-        Debug.Log($"{topscores.First().player_id}");
+        topPlayerDetail.text += $"{topscores.First().Player_id}";
+        Debug.Log($"{topscores.First().Player_id}");
 
         yourRankDetail.text += $"{currRank}";
     }

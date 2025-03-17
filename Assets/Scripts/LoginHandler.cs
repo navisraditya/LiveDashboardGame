@@ -1,4 +1,5 @@
 using App;
+using Supabase.Gotrue;
 using UnityEngine;
 
 public class LoginHandler : MonoBehaviour
@@ -11,7 +12,8 @@ public class LoginHandler : MonoBehaviour
         if(SupabaseStuff.Instance == null) {
             Login();
         } else {
-            bool isUserLoggedIn = SupabaseStuff.Instance.CheckLoggedInUser();
+            bool isUserLoggedIn = true;
+            _ = SupabaseStuff.Instance.GetLoggedInUser();
             if (!isUserLoggedIn){
                 Login();
             }

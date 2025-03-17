@@ -7,6 +7,9 @@ using App;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
+using System.Text;
+using static App.SupabaseStuff;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -49,46 +52,97 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    // public async Task SaveScoreToSupabase()
+    // {
+    //     if (SupabaseStuff.Instance == null)
+    //     {
+    //         Debug.LogError("Supabase error: Instance is null.");
+    //         return;
+    //     }
+
+    //     var user = await SupabaseStuff.Instance.GetLoggedInUser();
+    //     if (user == null)
+    //     {
+    //         Debug.Log("No Active Player. Score will not be saved.");
+    //         return;
+    //     }
+
+    //     // if(user.UserMetadata != null && user.UserMetadata.Equals("username")) {4
+    //     if(!user.UserMetadata.IsUnityNull()) {
+    //         Debug.Log("ada usermetadata");
+    //         string username = user.UserMetadata.username.ToString();
+    //         var newScore = new ScoreModel
+    //         {
+    //             player_id = username,
+    //             score = score,
+    //             playtime = playtime,
+    //         };
+            
+    //         try
+    //         {
+    //             var response = await SupabaseStuff.Instance.GetSupabaseClient()
+    //                 .From<ScoreModel>()
+    //                 .Insert(newScore);
+
+    //             if (response != null && response.Models != null)
+    //             {
+    //                 Debug.Log("Score saved.");
+    //             }
+    //             else
+    //             {
+    //                 Debug.Log("Saving score failed.");
+    //             }
+    //         }
+    //         catch (Exception e)
+    //         {
+    //             Debug.LogError($"Error saving score: {e.Message}");
+    //         }
+    //     }
+    // }
+
     public async Task SaveScoreToSupabase()
     {
-        if (SupabaseStuff.Instance == null)
-        {
-            Debug.LogError("Supabase error: Instance is null.");
+        string url = $"{SupabaseStuff.Instance.GetURL()}/rest/v1/scores";
+        using UnityWebRequest request = new(url, "POST");
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("apikey", SupabaseStuff.Instance.GetAPIKey());
+
+        SupabaseStuff.User user =  SupabaseStuff.Instance.GetLoggedInUser();
+        if(user == null) {
+            Debug.Log("user kosong gk bisa store data");
             return;
         }
 
-        var user = SupabaseStuff.Instance.GetLoggedInUser();
-        if (user == null)
-        {
-            Debug.Log("No Active Player. Score will not be saved.");
-            return;
-        }
+        if(!user.UserMetadata.IsUnityNull()){
+            string username = user.UserMetadata.Username.ToString();
+            var newScore = new ScoreModel{
+                Player_id = username,
+                Score = score,
+                Playtime = playtime,
+            };
 
-        var newScore = new ScoreModel
-        {
-            player_id = user.UserMetadata["username"].ToString(),
-            score = score,
-            playtime = playtime,
-        };
+            string jsonData = JsonConvert.SerializeObject(newScore);
+            Debug.LogWarning($"JSON yang dikirim dari ScoreManager: {jsonData}");
 
-        try
-        {
-            var response = await SupabaseStuff.Instance.GetSupabaseClient()
-                .From<ScoreModel>()
-                .Insert(newScore);
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonData);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
 
-            if (response != null && response.Models != null)
-            {
-                Debug.Log("Score saved.");
+            await request.SendWebRequest();
+            // request.SetRequestHeader("Authorization", $"Bearer {SupabaseStuff.Instance.GetAPIKey()}");
+
+            if(request.result == UnityWebRequest.Result.Success) {
+                Debug.Log("score berhasil disimpan");
+                Debug.LogError($"Response Code: {request.responseCode}");
+                Debug.LogError("Response Body: " + request.downloadHandler.text);
+            } else {
+                Debug.LogError($"score gagal disimpan karena: {request.error}");
+                Debug.LogError($"Response Code: {request.responseCode}");
+                Debug.LogError("Response Body: " + request.downloadHandler.text);
+
             }
-            else
-            {
-                Debug.Log("Saving score failed.");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Error saving score: {e.Message}");
+        } else {
+            Debug.LogError("user metadata kosong gk bisa store data");
         }
     }
 
@@ -127,7 +181,7 @@ public class ScoreManager : MonoBehaviour
         webRequest.SetRequestHeader("Authorization", $"Bearer {SupabaseStuff.Instance.GetAPIKey()}");
 
 
-        await webRequest.SendWebRequest();
+        _ = await webRequest.SendWebRequest();
 
         if (webRequest.result == UnityWebRequest.Result.ConnectionError ||
             webRequest.result == UnityWebRequest.Result.ProtocolError)
@@ -156,7 +210,7 @@ public class ScoreManager : MonoBehaviour
                 Debug.Log($"Number of scores fetched: {scores.Count}");
                 foreach (var score in scores)
                 {
-                    Debug.Log($"ID: {score.Id}, Player ID: {score.player_id}, Score: {score.score}, Playtime: {score.playtime}");
+                    Debug.Log($"ID: {score.Id}, Player ID: {score.Player_id}, Score: {score.Score}, Playtime: {score.Playtime}");
                 }
             }
 

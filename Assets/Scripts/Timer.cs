@@ -11,7 +11,7 @@ public class Timer : MonoBehaviour
     public bool isCountingGameplay = false;
     [SerializeField] ScoreManager scoreManager;
 
-    private void Awake()
+    private void Start()
     {
         if (Instance != null && Instance != this)
         {

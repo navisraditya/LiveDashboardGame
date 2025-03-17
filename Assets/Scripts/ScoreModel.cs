@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Postgrest.Attributes;
 using Postgrest.Models;
 using System;
@@ -6,17 +7,18 @@ using System;
 public class ScoreModel : BaseModel
 {
     [PrimaryKey("id", false)]
+    [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)] 
     public int? Id { get; set; }
     
     [Column("player_id")]
-    public string player_id { get; set; }
+    public string Player_id { get; set; }
     
     [Column("score")]
-    public int score { get; set; }
+    public int Score { get; set; }
     
     [Column("timestamp")]
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
     
     [Column("playtime")]
-    public float playtime {get; set;}
+    public float Playtime {get; set;}
 }
