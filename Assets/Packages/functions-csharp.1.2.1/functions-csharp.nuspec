@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>functions-csharp</id>
+    <version>1.2.1</version>
+    <title>Function</title>
+    <authors>Joseph Schultz &lt;joseph@acupofjose.com&gt;</authors>
+    <owners>Joseph Schultz &lt;joseph@acupofjose.com&gt;</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/supabase-community/functions-csharp/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/supabase-community/functions-csharp</projectUrl>
+    <iconUrl>https://avatars.githubusercontent.com/u/54469796?s=200&amp;v=4</iconUrl>
+    <description>A C# client for Supabase functions</description>
+    <copyright>MIT</copyright>
+    <tags>supabase, functions</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="supabase-core" version="0.0.2" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
