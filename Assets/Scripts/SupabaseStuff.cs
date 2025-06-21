@@ -18,8 +18,8 @@ using RequestException = Postgrest.RequestException;
 namespace App {
     public class SupabaseStuff : MonoBehaviour {
         public static SupabaseStuff Instance { get; private set;}
-        private const string SUPABASE_URL = "https://rbmxqlqzyemtwsajfjtw.supabase.co";
-        private const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJibXhxbHF6eWVtdHdzYWpmanR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcwMDgyNjcsImV4cCI6MjA1MjU4NDI2N30.N2-ULM2_1zc_yCo3zoYlolIZhX8OPnixsILHqhZxTO8";
+        private const string SUPABASE_URL = "https://zvudtnmbgjsxhtgylxyw.supabase.co";
+        private const string SUPABASE_PUBLIC_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp2dWR0bm1iZ2pzeGh0Z3lseHl3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcyMjE0MDIsImV4cCI6MjA2Mjc5NzQwMn0.nDTbbmOZwB8pw9xbZXYGHI8WBEJov3uxC6B7LO11Bvc";
         private string SUPABASE_USER_ACCESS_TOKEN;
         // public TMP_InputField result;
         public TMP_InputField email;
