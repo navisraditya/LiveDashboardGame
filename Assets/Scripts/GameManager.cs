@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,17 @@ public class GameManager : MonoBehaviour
     public float fadeDuration = 1.25f;
     public bool isFrozen = false;
     public UIHider uiHider;
+
+    public float minPlatformYDistEz = 0.5f;
+    public float maxPlatformYDistEz = 2.0f;
+    public float minPlatformYDistMed = 1.5f;
+    public float maxPlatformYDistMed = 3.0f;
+    public float minPlatformYDistHard = 2.5f;
+    public float maxPlatformYDistHard = 4.0f;
+
+    private float currMinYDist;
+    private float currMaxYDist;
+
 
     private class FadingPlatform
     {
@@ -89,12 +101,30 @@ void Update()
         Vector3 spawnPosition = new Vector3();
         for (int i = 0; i < platformCount; i++)
         {
-            spawnPosition.y += Random.Range(.5f, 2f);
+
+            if (i < platformCount / 3)
+            {
+                currMinYDist = minPlatformYDistEz;
+                currMaxYDist = maxPlatformYDistEz;
+            }
+            else if (i < (platformCount * 2) / 3)
+            {
+                currMinYDist = minPlatformYDistMed;
+                currMaxYDist = maxPlatformYDistMed;
+            }
+            else
+            {
+                currMinYDist = minPlatformYDistHard;
+                currMaxYDist = maxPlatformYDistHard;
+            }
+
+            spawnPosition.y += Random.Range(currMinYDist, currMaxYDist);
             spawnPosition.x = Random.Range(-2.2f, 2.2f);
             spawnPosition.z = 0;
 
             GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
 
+            
             SpriteRenderer spriteRenderer = platform.GetComponent<SpriteRenderer>();
             Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();  // Assuming you're using Rigidbody2D for physics-based platforms
             if (spriteRenderer != null)
