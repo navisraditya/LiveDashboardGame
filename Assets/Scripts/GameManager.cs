@@ -9,8 +9,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject platformPrefab;
     public static int platformCount = 300;
     public int level1 = platformCount / 2;
+    [SerializeField] int jumpForce1 = 10;
     public int level2 = platformCount * 2 / 3;
-    public int level3;
+    [SerializeField] int jumpForce2 = 50;
+    public int level3 = platformCount;
+    [SerializeField] int jumpForce3 = 100;
     
     public float fadeDuration = 1.25f;
     public bool isFrozen = false;
@@ -29,8 +32,6 @@ public class GameManager : MonoBehaviour
     private float currMaxYDist;
     private float lastCamPos;
     private int scoreIncVal = 1;
-    private int scoreLevel = 1;
-
 
     private class FadingPlatform
     {
@@ -130,22 +131,22 @@ public class GameManager : MonoBehaviour
         Vector3 spawnPosition = new Vector3();
         for (int i = 0; i < platformCount; i++)
         {
-
+            int jumpForce;
             if (i < level1)
             {
-                scoreLevel = 1;
+                jumpForce = jumpForce1;
                 currMinYDist = minPlatformYDistEz;
                 currMaxYDist = maxPlatformYDistEz;
             }
             else if (i < level2)
             {
-                scoreLevel = 2;
+                jumpForce = jumpForce2;
                 currMinYDist = minPlatformYDistMed;
                 currMaxYDist = maxPlatformYDistMed;
             }
             else
             {
-                scoreLevel = 3;
+                jumpForce = jumpForce3;
                 currMinYDist = minPlatformYDistHard;
                 currMaxYDist = maxPlatformYDistHard;
             }
@@ -155,8 +156,7 @@ public class GameManager : MonoBehaviour
             spawnPosition.z = 0;
 
             GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
-
-
+            platform.GetComponent<Platform>().jumpForce = jumpForce;
             SpriteRenderer spriteRenderer = platform.GetComponent<SpriteRenderer>();
             Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();  // Assuming you're using Rigidbody2D for physics-based platforms
             if (spriteRenderer != null)
