@@ -232,14 +232,17 @@ public class GameManager : MonoBehaviour
         {
             if (latestPlatformIdx < level1)
             {
+                print("level 1");
                 platformScript.jumpForce = jumpForce1;
             }
             else if (latestPlatformIdx < level2)
             {
+                print("level 2");
                 platformScript.jumpForce = jumpForce2;
             }
             else
             {
+                print("level 3");
                 platformScript.jumpForce = jumpForce3;
             }
         }

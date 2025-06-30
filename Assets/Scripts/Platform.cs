@@ -7,14 +7,6 @@ public class Platform : MonoBehaviour
     public float jumpForce = 10f;
     public ScoreManager scoreManager;
     public GameManager gameManager;
-
-    private int index;
-
-    public void SetIndex(int number)
-    {
-        index = number;
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && collision.relativeVelocity.y <= 0f)
@@ -30,8 +22,7 @@ public class Platform : MonoBehaviour
                 if (this.gameObject.name != "Platform")
                 {
                     // scoreManager.IncScore();
-                    gameManager.latestPlatformIdx = index;
-                    print(index);
+                    print(gameManager.latestPlatformIdx);
                     Destroy(gameObject);
                 }
             }
