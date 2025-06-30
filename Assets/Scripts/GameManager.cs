@@ -1,20 +1,21 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance {get; set;}
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject platformPrefab;
-    public static int platformCount = 300;
-    public int level1 = platformCount / 2;
+    public int platformCount = 300;
+    public int level1;
+    public int level2;
+    public int level3;
     [SerializeField] int jumpForce1 = 10;
-    public int level2 = platformCount * 2 / 3;
     [SerializeField] int jumpForce2 = 50;
-    public int level3 = platformCount;
     [SerializeField] int jumpForce3 = 100;
-    
+
+
     public float fadeDuration = 1.25f;
     public bool isFrozen = false;
     public UIHider uiHider;
@@ -28,32 +29,66 @@ public class GameManager : MonoBehaviour
     public float maxPlatformYDistHard = 4.0f;
 
 
+    public float minXOffset = 0.5f;
+    public float maxXOffset = 2.0f;
+    public float bigGapChance = 0.1f;
+    public float bigGapMinX = 2.5f;
+    public float bigGapMaxX = 3.5f;
+
+
     private float currMinYDist;
     private float currMaxYDist;
     private float lastCamPos;
-    private int scoreIncVal = 1;
+    private int scoreIncVal = 1; // TODO: bikin leveling system yang lebih dinamis buat level progression
+    public int latestPlatformIdx = 0;
+    private Vector3 lastSpawnedPos;
 
     private class FadingPlatform
     {
         public SpriteRenderer spriteRenderer;
         public float fadeTimer = 0f;
-        public Rigidbody2D rb;  // Reference to the platform's Rigidbody2D (if applicable)
-        public GameObject platformObject; // Reference to the platform GameObject
+        public Rigidbody2D rb;
+        public GameObject platformObject;
+        public float individualFadeDuration;
     }
 
-    private FadingPlatform[] fadingPlatforms;
-    private Transform playerTransform; // Reference to the player's transform
+    private List<FadingPlatform> activePlatforms;
+    private Transform playerTransform; 
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
-        // Call PreGame to start the game in frozen state
-        PreGame();
+        activePlatforms = new List<FadingPlatform>();
+        playerPrefab.SetActive(true);
 
-        // Get the player's transform
-        if (playerPrefab != null)
+        lastSpawnedPos = playerPrefab.transform.position;
+        SpawnSinglePlatform(lastSpawnedPos, true);
+
+        for (int i = 0; i < platformCount; i++)
         {
-            playerTransform = playerPrefab.transform;
+            SpawnSinglePlatform();
         }
+        lastCamPos = Camera.main.transform.position.y;
+
+        Time.timeScale = 0;
+        isFrozen = true;
+
+        // PreGame();
+        // if (playerPrefab != null)
+        // {
+        //     playerTransform = playerPrefab.transform;
+        // }
     }
 
     void Update()
@@ -70,42 +105,9 @@ public class GameManager : MonoBehaviour
         if (!isFrozen)
         {
             ScoreByCamY();
-            DestroyPlatform();
+            ManageActivePlatformsAndSpawnNew();
         }
     }
-
-    void DestroyPlatform()
-    {
-        for (int i = 0; i < platformCount; i++)
-            {
-                if (fadingPlatforms[i] != null && fadingPlatforms[i].spriteRenderer != null)
-                {
-                    FadingPlatform fadeData = fadingPlatforms[i];
-
-                    if (fadeData.fadeTimer < fadeDuration)
-                    {
-                        fadeData.fadeTimer += Time.deltaTime;
-
-                        float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
-                        Color color = fadeData.spriteRenderer.color;
-                        color.a = alpha;
-                        fadeData.spriteRenderer.color = color;
-                    }
-
-                    // Check if the camera has passed the platform
-                    if (fadeData.platformObject != null)
-                    {
-                        float cameraBottomY = Camera.main.transform.position.y - (Camera.main.orthographicSize + 1f); // Adding a small buffer
-
-                        if (fadeData.platformObject.transform.position.y < cameraBottomY)
-                        {
-                            Destroy(fadeData.platformObject);
-                            fadingPlatforms[i] = null; // Mark as destroyed
-                        }
-                    }
-                }
-            }
-        }
 
     void ScoreByCamY()
     {
@@ -119,97 +121,185 @@ public class GameManager : MonoBehaviour
             lastCamPos = currCamY;
     }
 
-    void PreGame()
+    void ManageActivePlatformsAndSpawnNew()
     {
-        // Freeze the game by setting objects to inactive (without deactivating them) and stopping movement
-        playerPrefab.SetActive(true);
-        platformPrefab.SetActive(true);
+        float cameraBottomY = Camera.main.transform.position.y - (Camera.main.orthographicSize + 1f);
 
-        // Add rigidbody reference for freezing physics
-        fadingPlatforms = new FadingPlatform[platformCount];
-
-        Vector3 spawnPosition = new Vector3();
-        for (int i = 0; i < platformCount; i++)
+        for (int i = activePlatforms.Count - 1; i >= 0; i--)
         {
-            int jumpForce;
-            if (i < level1)
+            FadingPlatform fadeData = activePlatforms[i];
+
+            if (fadeData.platformObject == null)
             {
-                jumpForce = jumpForce1;
+                activePlatforms.RemoveAt(i);
+                continue; 
+            }
+
+            if (fadeData.fadeTimer < fadeDuration) 
+            {
+                fadeData.fadeTimer += Time.deltaTime;
+                float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
+                Color color = fadeData.spriteRenderer.color;
+                color.a = alpha;
+                fadeData.spriteRenderer.color = color;
+            }
+
+            if (fadeData.platformObject.transform.position.y < cameraBottomY)
+            {
+                if (fadeData.platformObject.name != "Platform") 
+                {
+                    Destroy(fadeData.platformObject);
+                    activePlatforms.RemoveAt(i);
+                }
+            }
+        }
+
+        if (activePlatforms.Count < platformCount)
+        {
+            int platformsNeeded = platformCount - activePlatforms.Count;
+            for (int i = 0; i < platformsNeeded; i++)
+            {
+                SpawnSinglePlatform(); 
+            }
+        }
+    }
+    void SpawnSinglePlatform(Vector3? explicitSpawnPosition = null, bool isStartingPlatform = false)
+    {
+        Vector3 spawnPosition;
+        if (explicitSpawnPosition.HasValue)
+        {
+            spawnPosition = explicitSpawnPosition.Value;
+        }
+        else
+        {
+            if (latestPlatformIdx < level1)
+            {
+                platformCount = 15;
                 currMinYDist = minPlatformYDistEz;
                 currMaxYDist = maxPlatformYDistEz;
             }
-            else if (i < level2)
+            else if (latestPlatformIdx  < level2)
             {
-                jumpForce = jumpForce2;
+                platformCount = 10;
                 currMinYDist = minPlatformYDistMed;
                 currMaxYDist = maxPlatformYDistMed;
             }
             else
             {
-                jumpForce = jumpForce3;
+                platformCount = 5;
                 currMinYDist = minPlatformYDistHard;
                 currMaxYDist = maxPlatformYDistHard;
             }
 
-            spawnPosition.y += Random.Range(currMinYDist, currMaxYDist);
-            spawnPosition.x = Random.Range(-2.2f, 2.2f);
-            spawnPosition.z = 0;
+            spawnPosition.y = lastSpawnedPos.y + Random.Range(currMinYDist, currMaxYDist);
 
-            GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
-            platform.GetComponent<Platform>().jumpForce = jumpForce;
-            SpriteRenderer spriteRenderer = platform.GetComponent<SpriteRenderer>();
-            Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();  // Assuming you're using Rigidbody2D for physics-based platforms
-            if (spriteRenderer != null)
+            float currentMinXOffset = minXOffset;
+            float currentMaxXOffset = maxXOffset;
+
+            if (Random.value < bigGapChance)
             {
-                fadingPlatforms[i] = new FadingPlatform
-                {
-                    spriteRenderer = spriteRenderer,
-                    rb = rb,  // Save the reference to the Rigidbody2D
-                    platformObject = platform, // Save the reference to the platform GameObject
-                    fadeTimer = 0f
-                };
-
-                Color color = spriteRenderer.color;
-                color.a = 0f; // Initially make the platforms invissible
-                spriteRenderer.color = color;
+                currentMinXOffset = bigGapMinX;
+                currentMaxXOffset = bigGapMaxX;
             }
 
-            // If there's a Rigidbody2D, set it to kinematic to freeze movement
-            if (rb != null)
+            float horizontalOffset = Random.Range(currentMinXOffset, currentMaxXOffset);
+            if (Random.value > 0.5f)
             {
-                rb.bodyType = RigidbodyType2D.Dynamic; // Freeze the platform's movement by making it kinematic
+                horizontalOffset *= -1;
+            }
+
+            spawnPosition.x = lastSpawnedPos.x + horizontalOffset;
+
+            float screenHalfWidth = Camera.main.orthographicSize * Screen.width / Screen.height;
+            spawnPosition.x = Mathf.Clamp(spawnPosition.x, -screenHalfWidth + 0.7f, screenHalfWidth - 0.7f);
+
+            spawnPosition.z = 0;
+        }
+
+        GameObject platformGO = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
+
+        if (isStartingPlatform)
+        {
+            platformGO.name = "Platform";
+        }
+        else
+        {
+            platformGO.name = platformPrefab.name + "(Clone)";
+        }
+
+        Platform platformScript = platformGO.GetComponent<Platform>();
+        if (platformScript != null)
+        {
+            if (latestPlatformIdx < level1)
+            {
+                platformScript.jumpForce = jumpForce1;
+            }
+            else if (latestPlatformIdx < level2)
+            {
+                platformScript.jumpForce = jumpForce2;
+            }
+            else
+            {
+                platformScript.jumpForce = jumpForce3;
             }
         }
 
-        // Stop the game time (freeze everything except UI elements)
-        Time.timeScale = 0;
+        SpriteRenderer spriteRenderer = platformGO.GetComponent<SpriteRenderer>();
+        Rigidbody2D rb = platformGO.GetComponent<Rigidbody2D>();
 
-        isFrozen = true;
+        if (spriteRenderer != null)
+        {
+            float individualFadeTime = fadeDuration; 
+
+            FadingPlatform newFadingPlatform = new FadingPlatform
+            {
+                spriteRenderer = spriteRenderer,
+                rb = rb,
+                platformObject = platformGO,
+                fadeTimer = 0f,
+                individualFadeDuration = individualFadeTime
+            };
+            activePlatforms.Add(newFadingPlatform); 
+
+            Color color = spriteRenderer.color;
+            color.a = 0f; // Start invisible
+            spriteRenderer.color = color;
+        }
+
+        if (rb != null)
+        {
+            rb.bodyType = isFrozen ? RigidbodyType2D.Kinematic : RigidbodyType2D.Dynamic;
+        }
+
+        if (!explicitSpawnPosition.HasValue)
+        {
+            lastSpawnedPos = spawnPosition;
+        }
+        latestPlatformIdx++; 
     }
 
     void UnfreezeGame()
     {
-        // Reactivate the player and platform objects
         playerPrefab.SetActive(true);
-        platformPrefab.SetActive(true);
+
         uiHider.DisableButtons();
-        // Start the game and resume time
         Time.timeScale = 1;
 
         Timer.Instance.GameplayCounter();
 
-        // Reactivate the physics for the platforms
-        for (int i = 0; i < platformCount; i++)
+        foreach (FadingPlatform fp in activePlatforms)
         {
-            if (fadingPlatforms[i] != null && fadingPlatforms[i].rb != null)
+            if (fp.rb != null)
             {
-                fadingPlatforms[i].rb.bodyType = RigidbodyType2D.Dynamic; // Unfreeze the platform's movement
+                fp.rb.bodyType = RigidbodyType2D.Dynamic;
             }
         }
 
-        // Platforms should now start fading in
+        lastCamPos = Camera.main.transform.position.y;
         isFrozen = false;
     }
+}
+
 
     // public void DestroyPlatforms()
     // {
@@ -222,4 +312,3 @@ public class GameManager : MonoBehaviour
     //         }
     //     }
     // }
-}
