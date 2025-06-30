@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Platform : MonoBehaviour
 {
+    public static Platform Instance { get; private set; }
     public float jumpForce = 10f;
     public ScoreManager scoreManager;
 

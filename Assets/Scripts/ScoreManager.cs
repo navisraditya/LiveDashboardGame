@@ -34,6 +34,12 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    public void IncScore(int scoreInc)
+    {
+        score+=scoreInc;
+        UpdateScoreUI();
+    }
+
     public void IncScore()
     {
         score++;

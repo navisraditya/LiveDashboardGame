@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -6,10 +7,15 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance {get; set;}
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject platformPrefab;
-    public int platformCount = 300;
+    public static int platformCount = 300;
+    public int level1 = platformCount / 2;
+    public int level2 = platformCount * 2 / 3;
+    public int level3;
+    
     public float fadeDuration = 1.25f;
     public bool isFrozen = false;
     public UIHider uiHider;
+
 
     public float minPlatformYDistEz = 0.5f;
     public float maxPlatformYDistEz = 2.0f;
@@ -18,8 +24,12 @@ public class GameManager : MonoBehaviour
     public float minPlatformYDistHard = 2.5f;
     public float maxPlatformYDistHard = 4.0f;
 
+
     private float currMinYDist;
     private float currMaxYDist;
+    private float lastCamPos;
+    private int scoreIncVal = 1;
+    private int scoreLevel = 1;
 
 
     private class FadingPlatform
@@ -45,49 +55,68 @@ public class GameManager : MonoBehaviour
         }
     }
 
-void Update()
-{
-    if (isFrozen)
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        if (isFrozen)
         {
-            UnfreezeGame();
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+            {
+                lastCamPos = Camera.main.transform.position.y;
+                UnfreezeGame();
+            }
+        }
+
+        if (!isFrozen)
+        {
+            ScoreByCamY();
+            DestroyPlatform();
         }
     }
 
-    if (!isFrozen)
+    void DestroyPlatform()
     {
         for (int i = 0; i < platformCount; i++)
-        {
-            if (fadingPlatforms[i] != null && fadingPlatforms[i].spriteRenderer != null)
             {
-                FadingPlatform fadeData = fadingPlatforms[i];
-
-                if (fadeData.fadeTimer < fadeDuration)
+                if (fadingPlatforms[i] != null && fadingPlatforms[i].spriteRenderer != null)
                 {
-                    fadeData.fadeTimer += Time.deltaTime;
+                    FadingPlatform fadeData = fadingPlatforms[i];
 
-                    float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
-                    Color color = fadeData.spriteRenderer.color;
-                    color.a = alpha;
-                    fadeData.spriteRenderer.color = color;
-                }
-
-                // Check if the camera has passed the platform
-                if (fadeData.platformObject != null)
-                {
-                    float cameraBottomY = Camera.main.transform.position.y - (Camera.main.orthographicSize + 1f); // Adding a small buffer
-
-                    if (fadeData.platformObject.transform.position.y < cameraBottomY)
+                    if (fadeData.fadeTimer < fadeDuration)
                     {
-                        Destroy(fadeData.platformObject);
-                        fadingPlatforms[i] = null; // Mark as destroyed
+                        fadeData.fadeTimer += Time.deltaTime;
+
+                        float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
+                        Color color = fadeData.spriteRenderer.color;
+                        color.a = alpha;
+                        fadeData.spriteRenderer.color = color;
+                    }
+
+                    // Check if the camera has passed the platform
+                    if (fadeData.platformObject != null)
+                    {
+                        float cameraBottomY = Camera.main.transform.position.y - (Camera.main.orthographicSize + 1f); // Adding a small buffer
+
+                        if (fadeData.platformObject.transform.position.y < cameraBottomY)
+                        {
+                            Destroy(fadeData.platformObject);
+                            fadingPlatforms[i] = null; // Mark as destroyed
+                        }
                     }
                 }
             }
         }
+
+    void ScoreByCamY()
+    {
+            float currCamY = Camera.main.transform.position.y;
+            float yMovement = currCamY - lastCamPos;
+
+            if (yMovement > 0)
+            {
+                ScoreManager.Instance.IncScore(scoreIncVal);
+            }
+            lastCamPos = currCamY;
     }
-}
 
     void PreGame()
     {
@@ -102,18 +131,21 @@ void Update()
         for (int i = 0; i < platformCount; i++)
         {
 
-            if (i < platformCount / 3)
+            if (i < level1)
             {
+                scoreLevel = 1;
                 currMinYDist = minPlatformYDistEz;
                 currMaxYDist = maxPlatformYDistEz;
             }
-            else if (i < (platformCount * 2) / 3)
+            else if (i < level2)
             {
+                scoreLevel = 2;
                 currMinYDist = minPlatformYDistMed;
                 currMaxYDist = maxPlatformYDistMed;
             }
             else
             {
+                scoreLevel = 3;
                 currMinYDist = minPlatformYDistHard;
                 currMaxYDist = maxPlatformYDistHard;
             }
@@ -124,7 +156,7 @@ void Update()
 
             GameObject platform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
 
-            
+
             SpriteRenderer spriteRenderer = platform.GetComponent<SpriteRenderer>();
             Rigidbody2D rb = platform.GetComponent<Rigidbody2D>();  // Assuming you're using Rigidbody2D for physics-based platforms
             if (spriteRenderer != null)

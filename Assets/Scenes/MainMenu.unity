@@ -1645,10 +1645,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 5149794}
   platformPrefab: {fileID: 1963653744}
-  platformCount: 300
+  level1: 150
+  level2: 200
+  level3: 300
   fadeDuration: 1
   isFrozen: 0
   uiHider: {fileID: 18893261}
+  minPlatformYDistEz: 0.5
+  maxPlatformYDistEz: 2
+  minPlatformYDistMed: 1.5
+  maxPlatformYDistMed: 3
+  minPlatformYDistHard: 2.5
+  maxPlatformYDistHard: 4
 --- !u!4 &427271911
 Transform:
   m_ObjectHideFlags: 0
@@ -1759,6 +1767,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 575904505864201076, guid: 77e810e07da142440abfb21a7f864ffb, type: 3}
+      propertyPath: m_Mass
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 575904505864201076, guid: 77e810e07da142440abfb21a7f864ffb, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1247045286118469865, guid: 77e810e07da142440abfb21a7f864ffb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.14
@@ -1814,6 +1830,10 @@ PrefabInstance:
     - target: {fileID: 9174526313329910427, guid: 77e810e07da142440abfb21a7f864ffb, type: 3}
       propertyPath: rb
       value: 
+      objectReference: {fileID: 5149796}
+    - target: {fileID: 9174526313329910427, guid: 77e810e07da142440abfb21a7f864ffb, type: 3}
+      propertyPath: moveSpeed
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 9174526313329910427, guid: 77e810e07da142440abfb21a7f864ffb, type: 3}
       propertyPath: graphicsTransform
@@ -5694,6 +5714,7 @@ MonoBehaviour:
   loginCanvasGroup: {fileID: 1332871216}
   loginPopUpNo: {fileID: 1784007315}
   loginPopUpYes: {fileID: 1519334426}
+  logOutBtn: {fileID: 0}
 --- !u!114 &1280696802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9319,7 +9340,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLoggedIn: 0
   sceneLoader: {fileID: 427271912}
-  timer: {fileID: 499088455}
   timerTime: 1
   loginCanvas: {fileID: 1332871216}
 --- !u!1 &1959637189
