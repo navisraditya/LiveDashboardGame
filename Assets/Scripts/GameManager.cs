@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance {get; set;}
+    public static GameManager Instance { get; set; }
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject platformPrefab;
     public int platformCount = 300;
@@ -53,7 +56,7 @@ public class GameManager : MonoBehaviour
     }
 
     private List<FadingPlatform> activePlatforms;
-    private Transform playerTransform; 
+    private Transform playerTransform;
 
     void Awake()
     {
@@ -83,12 +86,6 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0;
         isFrozen = true;
-
-        // PreGame();
-        // if (playerPrefab != null)
-        // {
-        //     playerTransform = playerPrefab.transform;
-        // }
     }
 
     void Update()
@@ -111,14 +108,14 @@ public class GameManager : MonoBehaviour
 
     void ScoreByCamY()
     {
-            float currCamY = Camera.main.transform.position.y;
-            float yMovement = currCamY - lastCamPos;
+        float currCamY = Camera.main.transform.position.y;
+        float yMovement = currCamY - lastCamPos;
 
-            if (yMovement > 0)
-            {
-                ScoreManager.Instance.IncScore(scoreIncVal);
-            }
-            lastCamPos = currCamY;
+        if (yMovement > 0)
+        {
+            ScoreManager.Instance.IncScore(scoreIncVal);
+        }
+        lastCamPos = currCamY;
     }
 
     void ManageActivePlatformsAndSpawnNew()
@@ -132,10 +129,10 @@ public class GameManager : MonoBehaviour
             if (fadeData.platformObject == null)
             {
                 activePlatforms.RemoveAt(i);
-                continue; 
+                continue;
             }
 
-            if (fadeData.fadeTimer < fadeDuration) 
+            if (fadeData.fadeTimer < fadeDuration)
             {
                 fadeData.fadeTimer += Time.deltaTime;
                 float alpha = Mathf.Clamp01(fadeData.fadeTimer / fadeDuration);
@@ -146,7 +143,7 @@ public class GameManager : MonoBehaviour
 
             if (fadeData.platformObject.transform.position.y < cameraBottomY)
             {
-                if (fadeData.platformObject.name != "Platform") 
+                if (fadeData.platformObject.name != "Platform")
                 {
                     Destroy(fadeData.platformObject);
                     activePlatforms.RemoveAt(i);
@@ -159,7 +156,7 @@ public class GameManager : MonoBehaviour
             int platformsNeeded = platformCount - activePlatforms.Count;
             for (int i = 0; i < platformsNeeded; i++)
             {
-                SpawnSinglePlatform(); 
+                SpawnSinglePlatform();
             }
         }
     }
@@ -178,32 +175,40 @@ public class GameManager : MonoBehaviour
                 currMinYDist = minPlatformYDistEz;
                 currMaxYDist = maxPlatformYDistEz;
             }
-            else if (latestPlatformIdx  < level2)
+            else if (latestPlatformIdx < level2)
             {
                 platformCount = 10;
                 currMinYDist = minPlatformYDistMed;
                 currMaxYDist = maxPlatformYDistMed;
             }
-            else
+            else if (latestPlatformIdx < level3)
             {
                 platformCount = 5;
                 currMinYDist = minPlatformYDistHard;
                 currMaxYDist = maxPlatformYDistHard;
             }
+            else
+            {
+                float[] minYDistList = { minPlatformYDistEz, minPlatformYDistMed, minPlatformYDistHard };
+                float[] maxYDistList = { maxPlatformYDistEz, maxPlatformYDistMed, maxPlatformYDistHard };
 
-            spawnPosition.y = lastSpawnedPos.y + Random.Range(currMinYDist, currMaxYDist);
+                currMinYDist = UnityEngine.Random.Range(minYDistList[0], minYDistList[minYDistList.Count() - 1]);
+                currMaxYDist = UnityEngine.Random.Range(maxYDistList[0], maxYDistList[maxYDistList.Count() -1]);
+            }
+
+            spawnPosition.y = lastSpawnedPos.y + UnityEngine.Random.Range(currMinYDist, currMaxYDist);
 
             float currentMinXOffset = minXOffset;
             float currentMaxXOffset = maxXOffset;
 
-            if (Random.value < bigGapChance)
+            if (UnityEngine.Random.value < bigGapChance)
             {
                 currentMinXOffset = bigGapMinX;
                 currentMaxXOffset = bigGapMaxX;
             }
 
-            float horizontalOffset = Random.Range(currentMinXOffset, currentMaxXOffset);
-            if (Random.value > 0.5f)
+            float horizontalOffset = UnityEngine.Random.Range(currentMinXOffset, currentMaxXOffset);
+            if (UnityEngine.Random.value > 0.5f)
             {
                 horizontalOffset *= -1;
             }
@@ -232,17 +237,14 @@ public class GameManager : MonoBehaviour
         {
             if (latestPlatformIdx < level1)
             {
-                print("level 1");
                 platformScript.jumpForce = jumpForce1;
             }
             else if (latestPlatformIdx < level2)
             {
-                print("level 2");
                 platformScript.jumpForce = jumpForce2;
             }
-            else
+            else if (latestPlatformIdx < level3)
             {
-                print("level 3");
                 platformScript.jumpForce = jumpForce3;
             }
         }
@@ -302,16 +304,3 @@ public class GameManager : MonoBehaviour
         isFrozen = false;
     }
 }
-
-
-    // public void DestroyPlatforms()
-    // {
-    //     for (int i = 0; i < fadingPlatforms.Length; i++)
-    //     {
-    //         if (fadingPlatforms[i] != null && fadingPlatforms[i].platformObject != null)
-    //         {
-    //             Destroy(fadingPlatforms[i].platformObject); // Destroy the platform GameObject
-    //             fadingPlatforms[i] = null; // Clear the reference in the array
-    //         }
-    //     }
-    // }

@@ -5,13 +5,13 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField] private Slider volumeSlider;
 
-    private float previousVolume = 1f; // Default volume
+    private float previousVolume = 1f; 
 
     void Start()
     {
         if (!PlayerPrefs.HasKey("musicVolume"))
         {
-            PlayerPrefs.SetFloat("musicVolume", 1f); // Default to max volume
+            PlayerPrefs.SetFloat("musicVolume", 1f); 
         }
 
         LoadVolume();
@@ -21,29 +21,29 @@ public class SoundManager : MonoBehaviour
     {
         if (volumeSlider.value > 0)
         {
-            previousVolume = volumeSlider.value; // Save the current volume
+            previousVolume = volumeSlider.value; 
         }
 
-        AudioListener.volume = volumeSlider.value; // Apply the slider value to AudioListener
+        AudioListener.volume = volumeSlider.value; 
         SaveVolume();
     }
 
     public void SetVolume(float volume)
     {
-        previousVolume = volumeSlider.value; // Save the current volume
-        volumeSlider.value = volume; // Set the new slider value
-        AudioListener.volume = volume; // Apply to AudioListener
+        previousVolume = volumeSlider.value; 
+        volumeSlider.value = volume; 
+        AudioListener.volume = volume; 
     }
 
     public void ResetVolume()
     {
-        volumeSlider.value = previousVolume; // Restore the previous volume
-        AudioListener.volume = previousVolume; // Apply to AudioListener
+        volumeSlider.value = previousVolume; 
+        AudioListener.volume = previousVolume; 
     }
 
     public float GetVolume()
     {
-        return volumeSlider.value; // Return the current slider value
+        return volumeSlider.value; 
     }
 
     private void LoadVolume()

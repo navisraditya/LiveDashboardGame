@@ -4,8 +4,7 @@ using UnityEngine.UI;
 public class MuteManager : MonoBehaviour
 {
     [SerializeField] private Toggle muteToggle;
-    [SerializeField] private SoundManager soundManager; // Reference to the SoundManager script
-
+    [SerializeField] private SoundManager soundManager; 
     private bool muted;
 
     void Start()
@@ -13,7 +12,7 @@ public class MuteManager : MonoBehaviour
         // Ensure default values
         if (!PlayerPrefs.HasKey("muted"))
         {
-            PlayerPrefs.SetInt("muted", 0); // Default to not muted
+            PlayerPrefs.SetInt("muted", 0); 
         }
 
         LoadMuteState();
@@ -23,7 +22,7 @@ public class MuteManager : MonoBehaviour
 
     public void OnMuteToggleChanged()
     {
-        muted = !muteToggle.isOn; // Reverse logic: off toggle means muted
+        muted = !muteToggle.isOn; 
         ApplyMuteState();
         SaveMuteState();
     }
@@ -32,7 +31,7 @@ public class MuteManager : MonoBehaviour
     {
         if (soundManager != null && soundManager.GetVolume() > 0)
         {
-            muted = false; // Automatically unmute if the volume slider is changed
+            muted = false; 
             UpdateToggleState();
             SaveMuteState();
         }
@@ -52,7 +51,7 @@ public class MuteManager : MonoBehaviour
     {
         if (muteToggle != null)
         {
-            muteToggle.isOn = !muted; // Reverse logic: off toggle means muted
+            muteToggle.isOn = !muted;
         }
     }
 
@@ -63,7 +62,7 @@ public class MuteManager : MonoBehaviour
             AudioListener.pause = true;
             if (soundManager != null)
             {
-                soundManager.SetVolume(0); // Set the slider to 0 when muted
+                soundManager.SetVolume(0); 
             }
         }
         else
@@ -71,7 +70,7 @@ public class MuteManager : MonoBehaviour
             AudioListener.pause = false;
             if (soundManager != null)
             {
-                soundManager.ResetVolume(); // Restore the slider to the previous volume
+                soundManager.ResetVolume(); 
             }
         }
     }
