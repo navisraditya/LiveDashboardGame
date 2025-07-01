@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0;
         isFrozen = true;
+        SoundPrefab.Instance.PlayBGM(BGM.MainBGM);
     }
 
     void Update()

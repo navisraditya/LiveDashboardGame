@@ -22,6 +22,7 @@ public class Platform : MonoBehaviour
                 if (this.gameObject.name != "Platform")
                 {
                     // scoreManager.IncScore();
+                    SoundPrefab.Instance.PlaySFX(SFX.Jump);
                     print(gameManager.latestPlatformIdx);
                     Destroy(gameObject);
                 }
