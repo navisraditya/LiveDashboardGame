@@ -10,6 +10,8 @@ using Newtonsoft.Json;
 using Unity.VisualScripting;
 using System.Text;
 using static App.SupabaseStuff;
+using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -34,9 +36,32 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scoreUI == null)
+        {
+            GameObject scoreUIIGO = GameObject.FindWithTag("ScoreUI");
+                if (scoreUIIGO != null)
+                {
+                    scoreUI = scoreUIIGO.GetComponent<TMP_Text>();
+                }
+        }
+    }
+
+
     public void IncScore(int scoreInc)
     {
-        score+=scoreInc;
+        score += scoreInc;
         UpdateScoreUI();
     }
 

@@ -46,6 +46,11 @@ public class GameManager : MonoBehaviour
     public int latestPlatformIdx = 0;
     private Vector3 lastSpawnedPos;
 
+
+    private BGM? currentPLayingBGM = null;
+    private int currLevel = 1;
+
+
     private class FadingPlatform
     {
         public SpriteRenderer spriteRenderer;
@@ -56,7 +61,6 @@ public class GameManager : MonoBehaviour
     }
 
     private List<FadingPlatform> activePlatforms;
-    private Transform playerTransform;
 
     void Awake()
     {
@@ -86,7 +90,12 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0;
         isFrozen = true;
-        SoundPrefab.Instance.PlayBGM(BGM.MainBGM);
+
+        if (SoundPrefab.Instance != null && currentPLayingBGM != BGM.MainBGM)
+        {
+            SoundPrefab.Instance.PlayBGM(BGM.MainBGM);
+            currentPLayingBGM = BGM.MainBGM;
+        }
     }
 
     void Update()
@@ -104,6 +113,31 @@ public class GameManager : MonoBehaviour
         {
             ScoreByCamY();
             ManageActivePlatformsAndSpawnNew();
+            InGameBGMManager();
+        }
+    }
+
+    void InGameBGMManager()
+    {
+        BGM desiredBGM = BGM.level1;
+
+        if (currLevel == 1)
+        {
+            desiredBGM = BGM.level1;
+        }
+        else if (currLevel == 2)
+        {
+            desiredBGM = BGM.level2;
+        }
+        else
+        {
+            desiredBGM = BGM.level3;
+        }
+
+        if (SoundPrefab.Instance != null && currentPLayingBGM != desiredBGM)
+        {
+            SoundPrefab.Instance.PlayBGM(desiredBGM);
+            currentPLayingBGM = desiredBGM;
         }
     }
 
@@ -172,24 +206,28 @@ public class GameManager : MonoBehaviour
         {
             if (latestPlatformIdx < level1)
             {
+                currLevel = 1;
                 platformCount = 15;
                 currMinYDist = minPlatformYDistEz;
                 currMaxYDist = maxPlatformYDistEz;
             }
             else if (latestPlatformIdx < level2)
             {
+                currLevel = 2;
                 platformCount = 10;
                 currMinYDist = minPlatformYDistMed;
                 currMaxYDist = maxPlatformYDistMed;
             }
             else if (latestPlatformIdx < level3)
             {
+                currLevel = 3;
                 platformCount = 5;
                 currMinYDist = minPlatformYDistHard;
                 currMaxYDist = maxPlatformYDistHard;
             }
             else
             {
+                currLevel = 3;
                 float[] minYDistList = { minPlatformYDistEz, minPlatformYDistMed, minPlatformYDistHard };
                 float[] maxYDistList = { maxPlatformYDistEz, maxPlatformYDistMed, maxPlatformYDistHard };
 
@@ -303,5 +341,11 @@ public class GameManager : MonoBehaviour
 
         lastCamPos = Camera.main.transform.position.y;
         isFrozen = false;
+
+        if (SoundPrefab.Instance != null && currentPLayingBGM != BGM.level1)
+        {
+            SoundPrefab.Instance.PlayBGM(BGM.level1);
+            currentPLayingBGM = BGM.level1;
+        }
     }
 }
