@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Framework;
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -105,15 +101,14 @@ public class GameManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
             {
-                lastCamPos = Camera.main.transform.position.y;
                 UnfreezeGame();
             }
         }
 
         if (!isFrozen)
         {
-            ManageActivePlatformsAndSpawnNew();
             LevelManager();
+            ManageActivePlatformsAndSpawnNew();
         }
     }
 

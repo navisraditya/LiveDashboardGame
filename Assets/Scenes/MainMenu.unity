@@ -1645,6 +1645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 5149794}
   platformPrefab: {fileID: 1963653744}
+  FadingCanvas: {fileID: 18893255}
   platformCount: 50
   level1: 150
   level2: 200
@@ -1667,6 +1668,7 @@ MonoBehaviour:
   bigGapMinX: 2.5
   bigGapMaxX: 3.5
   latestPlatformIdx: 1
+  currLevel: 1
 --- !u!4 &427271911
 Transform:
   m_ObjectHideFlags: 0
