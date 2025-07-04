@@ -7,6 +7,7 @@ public class Platform : MonoBehaviour
     public float jumpForce = 10f;
     public ScoreManager scoreManager;
     public GameManager gameManager;
+    public int score = 1;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player") && collision.relativeVelocity.y <= 0f)
@@ -21,7 +22,18 @@ public class Platform : MonoBehaviour
 
                 if (this.gameObject.name != "Platform")
                 {
-                    // scoreManager.IncScore();
+                    if (gameManager.currLevel == 1)
+                    {
+                        scoreManager.IncScore();
+                    }
+                    else if (gameManager.currLevel == 2)
+                    {
+                        scoreManager.IncScore(5);
+                    }
+                    else
+                    {
+                        scoreManager.IncScore(10);
+                    }
                     SoundPrefab.Instance.PlaySFX(SFX.Jump);
                     print(gameManager.latestPlatformIdx);
                     Destroy(gameObject);

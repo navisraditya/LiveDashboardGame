@@ -12,30 +12,24 @@ public class LoseCondition : MonoBehaviour
 
     private async void OnCollisionEnter2D(Collision2D collision)
     {
-        // Check if the collision is with the player
         if (collision.gameObject.CompareTag("Player"))
         {
             isLoggedIn = false;
             Rigidbody2D rb = collision.gameObject.GetComponent<Rigidbody2D>();
             if (rb == null) return;
 
-            // Slow down time for effect
             Time.timeScale = 0.25f;
 
-            // Stop the gameplay counter and start the timer
             Timer.Instance.StopGameplayCounter();
             Timer.Instance.BeginCouting(timerTime);
 
-            // Check if a user is logged in
             var user = SupabaseStuff.Instance.GetLoggedInUser();
 
             if (user == null)
             {
                 Debug.LogError("ini di LoseCondition, user kosong");
-                // No user is logged in, open the login canvas
                 OpenLoginCanvas();
 
-                // Save the score (if ScoreManager exists)
                 if (ScoreManager.Instance == null)
                 {
                     Debug.LogError("ScoreManager instance is null.");
@@ -44,12 +38,11 @@ public class LoseCondition : MonoBehaviour
             }
             else
             {
-                // User is logged in, save the score and load the leaderboard
                 if (ScoreManager.Instance != null)
                 {
                     Debug.Log(user);
-                    await ScoreManager.Instance.SaveScoreToSupabase(); // Save the score
-                    sceneLoader.LoadScene("Leaderboard"); // Load the leaderboard scene
+                    await ScoreManager.Instance.SaveScoreToSupabase(); 
+                    sceneLoader.LoadScene("Leaderboard");
                 }
                 else
                 {
@@ -61,11 +54,11 @@ public class LoseCondition : MonoBehaviour
 
     private void OpenLoginCanvas()
     {
-        // GameManager.Instance.DestroyPlatforms();
         if (loginCanvas != null)
         {
+            GameManager.Instance.InactivePlatformAndPlayer();
             Time.timeScale = 0f;
-            loginCanvas.gameObject.SetActive(true); // Show the login canvas
+            loginCanvas.gameObject.SetActive(true);
         }
         else
         {

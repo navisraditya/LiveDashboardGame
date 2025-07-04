@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; set; }
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject platformPrefab;
+    [SerializeField] GameObject FadingCanvas;
     public int platformCount = 300;
     public int level1;
     public int level2;
@@ -42,13 +44,12 @@ public class GameManager : MonoBehaviour
     private float currMinYDist;
     private float currMaxYDist;
     private float lastCamPos;
-    private int scoreIncVal = 1; // TODO: bikin leveling system yang lebih dinamis buat level progression
     public int latestPlatformIdx = 0;
     private Vector3 lastSpawnedPos;
 
 
     private BGM? currentPLayingBGM = null;
-    private int currLevel = 1;
+    public int currLevel = 1;
 
 
     private class FadingPlatform
@@ -111,13 +112,12 @@ public class GameManager : MonoBehaviour
 
         if (!isFrozen)
         {
-            ScoreByCamY();
             ManageActivePlatformsAndSpawnNew();
-            InGameBGMManager();
+            LevelManager();
         }
     }
 
-    void InGameBGMManager()
+    void LevelManager()
     {
         BGM desiredBGM = BGM.level1;
 
@@ -139,18 +139,6 @@ public class GameManager : MonoBehaviour
             SoundPrefab.Instance.PlayBGM(desiredBGM);
             currentPLayingBGM = desiredBGM;
         }
-    }
-
-    void ScoreByCamY()
-    {
-        float currCamY = Camera.main.transform.position.y;
-        float yMovement = currCamY - lastCamPos;
-
-        if (yMovement > 0)
-        {
-            ScoreManager.Instance.IncScore(scoreIncVal);
-        }
-        lastCamPos = currCamY;
     }
 
     void ManageActivePlatformsAndSpawnNew()
@@ -195,6 +183,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     void SpawnSinglePlatform(Vector3? explicitSpawnPosition = null, bool isStartingPlatform = false)
     {
         Vector3 spawnPosition;
@@ -320,6 +309,18 @@ public class GameManager : MonoBehaviour
             lastSpawnedPos = spawnPosition;
         }
         latestPlatformIdx++; 
+    }
+
+    public void InactivePlatformAndPlayer()
+    {
+        FadingCanvas.SetActive(false);
+        for (int i = 0; i < activePlatforms.Count(); i++)
+        {
+            FadingPlatform currPlatform = activePlatforms[i];
+
+            currPlatform.platformObject.SetActive(false);
+            playerPrefab.SetActive(false);
+        }
     }
 
     void UnfreezeGame()
